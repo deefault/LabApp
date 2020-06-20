@@ -1,0 +1,67 @@
+<nb-card>
+  <nb-card-header>
+    <app-back-header [text]="item.assignmentName" [backUrl]="back" *ngIf="!loading"></app-back-header>
+  </nb-card-header>
+  <nb-card-body>
+    <div *ngIf="!loading" class="container">
+      <nb-alert [status]="getStatusForStatusAlert(item.status)">
+        {{getTextForStatusAlert(item.status)}}
+      </nb-alert>
+      <h6>Работа: {{item.assignmentName}}</h6>
+      <div *ngIf="item.body && item.body.length">
+        <app-label text="Текст"></app-label>
+        <textarea class="form-control" nbInput [value]="item.body" readonly>{{item.body}}</textarea>
+      </div>
+
+      <div class="mt-3">
+        <app-attachment-list [editable]="false" [items]="item.attachments"></app-attachment-list>
+      </div>
+      <div class="mt-3">
+        <app-user [user]="item.student" [size]="'medium'"></app-user>
+      </div>
+      <div class="mt-3 row ml-3">
+        <button (click)="requestChanges()"
+                *ngIf="item.status != ApprovedStatus && item.status != ChangesRequestedStatus && !editShow"
+                nbButton status="danger" outline="true">
+          Нужны изменения
+        </button>
+        <button class="ml-3" nbButton (click)="editClick()" [status]="getStatus()">
+          {{editShow ? 'Скрыть' : item.status != ApprovedStatus ? 'Принять работу' : 'Редактировать'}}
+        </button>
+      </div>
+      <nb-alert *ngIf="editShow" class="mt-4" [status]="'basic'" outline="info">
+        <div class="container">
+          <form class="form-group" ngForm="form" (ngSubmit)="onSave()">
+            <app-label [text]="'Балл'">
+            </app-label>
+            <div class="row">
+              <input class="form-control" nbInput status="info" type="number" [(ngModel)]="score" min="0" name="score"
+                     [max]="assignment.maxScore"/>
+              <span class="ml-3">из {{assignment.maxScore}}</span>
+            </div>
+            <ng-template
+              *ngIf="assignment.fineAfterDeadline && assignment.deadLine && assignment.deadLine < item.submitted">
+              <div class="alert text-danger">Студент прострочил работу. Штраф: {{assignment.fineAfterDeadline}}</div>
+              <nb-toggle [(checked)]="editShow">Задать штраф вручную</nb-toggle>
+              <input class="form-control" nbInput status="info" type="number" [(ngModel)]="fineScore" name="fineScore"
+                     *ngIf="showFineScore"
+                     [max]="assignment.maxScore" min="0">
+            </ng-template>
+            <button nbButton type="submit" class="btn row ml-3 mt-3">
+              Сохранить
+            </button>
+          </form>
+        </div>
+      </nb-alert>
+    </div>
+
+    <app-spinner *ngIf="loading"></app-spinner>
+  </nb-card-body>
+</nb-card>
+
+<nb-card *ngIf="conversation">
+  <nb-card-body>
+    <app-conversation [conversation]="conversation">
+    </app-conversation>
+  </nb-card-body>
+</nb-card>

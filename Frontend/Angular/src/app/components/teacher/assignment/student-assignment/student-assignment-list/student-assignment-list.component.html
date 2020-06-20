@@ -1,0 +1,27 @@
+<app-spinner *ngIf="loading"></app-spinner>
+<div *ngIf="!loading">
+  <nb-list *ngIf="items && items.length; else noItems"
+           nbInfiniteList
+           [threshold]="500">
+    <nb-list-item *ngFor="let item of items" (click)="onAssignmentClick(item)">
+      <div class="row">
+        <div class="col-2">
+          <nb-icon [icon]="getStatusIcon(item.status)" [nbTooltip]="getTooltipText(item.status)"></nb-icon>
+        </div>
+        <div class="col-6">
+          <app-user [user]="item.student" [size]="'small'"></app-user>
+        </div>
+        <div class="col-4">
+          <span class="font-weight-bold">{{item.assignmentName}}</span>
+        </div>
+      </div>
+    </nb-list-item>
+  </nb-list>
+  <button nbButton size="tiny" status="basic" (click)="getData()"
+          *ngIf="!loading && items && !isLastPage">Загрузить еще
+  </button>
+  <ng-template #noItems>
+    <h6 class="text-center">Нет заданий на проверку</h6>
+  </ng-template>
+</div>
+

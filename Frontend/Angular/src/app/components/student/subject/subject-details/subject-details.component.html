@@ -1,0 +1,26 @@
+<nb-card *ngIf="!loading">
+  <nb-card-header class="row">
+    <button-back class="ml-3" [backUrl]="[back]"></button-back>
+    <div class="ml-3">{{group.subject.name}}</div>
+  </nb-card-header>
+  <nb-card-body>
+    <div *ngIf="group.subject.description">
+      <h6>{{group.subject.description}}</h6>
+      <hr>
+    </div>
+    <div class="ml-3 mt-3">
+      <h6 class="row">Преподаватель</h6>
+      <div class="row">
+        <!--TODO: user component -->
+        <app-user [user]="group.teacher" size="giant"></app-user>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+<nb-card>
+  <nb-card-body>
+    <nb-route-tabset [tabs]="tabs">
+    </nb-route-tabset>
+  </nb-card-body>
+</nb-card>
+<app-spinner *ngIf="loading"></app-spinner>

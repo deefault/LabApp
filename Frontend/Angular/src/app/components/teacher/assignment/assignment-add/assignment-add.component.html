@@ -1,0 +1,56 @@
+<nb-card>
+  <nb-card-header>
+    <app-back-header [showBack]="!this.dialog" text="Добавить лабораторную"></app-back-header>
+  </nb-card-header>
+  <nb-card-body>
+
+    <form class="form-group" #form="ngForm" (ngSubmit)="add()">
+      <div class="form-group">
+        <app-label text="Название"></app-label>
+        <input nbInput type="text" required name="name" class="form-control" [(ngModel)]="item.name" #name="ngModel"
+               fullWidth>
+        <app-input-error [hidden]="!isInvalid(name)"></app-input-error>
+      </div>
+
+      <div class="form-group">
+        <app-label text="Описание"></app-label>
+        <textarea nbInput type="text" name="description" class="form-control" [(ngModel)]="item.description"
+                  multiple="true" fullWidth #description="ngModel">
+        </textarea>
+        <app-input-error [hidden]="!isInvalid(description)"></app-input-error>
+      </div>
+
+      <div class="form-group">
+        <app-label text="Максимальный балл"></app-label>
+        <input nbInput type="number" required name="maxScore" class="form-control" [(ngModel)]="item.maxScore"
+               #maxScore="ngModel" min="0" oninput="validity.valid||(value='');">
+        <app-input-error [hidden]="!isInvalid(maxScore)"></app-input-error>
+      </div>
+
+      <div class="form-group">
+        <nb-toggle size="large" [(checked)]="item.allowAfterDeadline">Разрешить сдавать после дедлайна</nb-toggle>
+      </div>
+
+      <nb-alert outline="basic" *ngIf="item.allowAfterDeadline"
+                [nbTooltip]="(!item.maxScore) ? 'Сначала заполните максимальный балл' : null">
+        <div class="form-group">
+          <app-label text="Штрафные баллы"></app-label>
+          <input nbInput type="number" name="fineAfterDeadline" class="form-control"
+                 [(ngModel)]="item.fineAfterDeadline"
+                 #fineAfterDeadline="ngModel" min="0" [max]="item.maxScore" [disabled]="!item.maxScore"
+                 oninput="validity.valid||(value='');">
+        </div>
+      </nb-alert>
+      <app-subject-selector (selectedChange)="item.subjectId = $event.id" class="mb-3" [hidden]="subjectId"
+                            [subjectId]="subjectId">
+
+      </app-subject-selector>
+      <app-attachment-list [items]="item.attachments" [editable]="true" (onAdd)="addAttachment($event)"
+                           (onDelete)="deleteAttachment($event)"></app-attachment-list>
+
+      <button class="mt-3" nbButton type="submit" status="primary" [disabled]="form.invalid || !item.subjectId">
+        Добавить
+      </button>
+    </form>
+  </nb-card-body>
+</nb-card>

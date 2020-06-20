@@ -1,0 +1,44 @@
+<nb-card>
+  <nb-card-header>
+    <div class="row d-flex">
+      <div class="col-8">
+        <app-back-header [showBack]="false" text="Ваша работа" class="text-center"></app-back-header>
+      </div>
+      <button nbButton (click)="editChange()" [status]="edit ? 'basic' : 'primary'" *ngIf="item && item.id"
+              class="ml-auto p-2 mr-3">
+        {{edit ? 'Отмена' : 'Редактировать'}}
+      </button>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+
+    <nb-alert *ngIf="!isNew()" [status]="getAlertStatus()">
+      {{getAlertText()}}
+    </nb-alert>
+    <form class="form-group" #form="ngForm" *ngIf="!loading" (ngSubmit)="formSubmitClicked()">
+      <div class="form-group">
+        <app-label text="Текст"></app-label>
+        <textarea nbInput type="text" name="description" class="form-control" [(ngModel)]="item.body"
+                  [readOnly]="!isEditable()" multiple="true" fullWidth #description="ngModel">
+    </textarea>
+      </div>
+      <app-attachment-list [items]="item.attachments" [editable]="isEditable()" (onAdd)="addAttachment($event)"
+                           (onDelete)="deleteAttachment($event)"></app-attachment-list>
+      <button [hidden]="!isEditable()" class="mt-3" nbButton type="submit" status="primary"
+              [disabled]="form.invalid">
+        {{item && item.id ? 'Сохранить' : 'Отправить'}}
+      </button>
+      <button class="mt-3" nbButton status="primary" *ngIf="item.status && item.status == 1" (click)="needReview()">
+        Запросить повторную проверку
+      </button>
+    </form>
+
+  </nb-card-body>
+</nb-card>
+
+<nb-card *ngIf="conversation">
+  <nb-card-body>
+    <app-conversation [conversation]="conversation">
+    </app-conversation>
+  </nb-card-body>
+</nb-card>

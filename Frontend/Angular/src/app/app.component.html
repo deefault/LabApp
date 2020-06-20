@@ -1,0 +1,44 @@
+<nb-layout>
+  <nb-layout-header fixed *ngIf="!hideSideBar">
+    <!-- Insert header here -->
+    <div class="col-8">
+      <ng-container *ngIf="authService.isLoggedIn; else notLogged" #logged>
+        <app-navbar-actions-teacher *ngIf="authService.isTeacher; else studentActions"></app-navbar-actions-teacher>
+        <ng-template #studentActions>
+          <nb-actions>
+            <nb-action>{{authService.userIdentity.Email}}</nb-action>
+            <nb-action (click)="authService.logout()" link>Выйти</nb-action>
+          </nb-actions>
+        </ng-template>
+      </ng-container>
+      <ng-template #notLogged>
+        <nb-actions>
+          <nb-action [routerLink]="['/login']">Войти</nb-action>
+        </nb-actions>
+      </ng-template>
+    </div>
+    <div class="col-4">
+      <nb-select class="float-right" [(selected)]="settings.currentTheme" size="medium" nbTooltip="Тема">
+        <nb-option *ngFor="let t of settings.themes" [value]="t"
+                   (selectionChange)="settings.changeTheme(t)">{{t}}</nb-option>
+      </nb-select>
+    </div>
+  </nb-layout-header>
+
+
+  <nb-sidebar *ngIf="!hideSideBar">
+    <app-menu></app-menu>
+  </nb-sidebar>
+
+  <nb-layout-column>
+    <div class="container">
+      <router-outlet></router-outlet>
+    </div>
+
+  </nb-layout-column>
+
+  <nb-layout-footer fixed>
+    <!-- Insert footer here -->
+  </nb-layout-footer>
+
+</nb-layout>

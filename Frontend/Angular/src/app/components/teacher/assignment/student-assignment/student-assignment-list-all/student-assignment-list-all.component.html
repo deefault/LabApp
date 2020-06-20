@@ -1,0 +1,9 @@
+<nb-card>
+  <nb-card-header>
+    <nb-toggle [(ngModel)]="onlyNew">Только новые</nb-toggle>
+  </nb-card-header>
+  <nb-card-body>
+    <app-student-assignment-list [onlyNew]="onlyNew" (selectedChange)="selected($event)">
+    </app-student-assignment-list>
+  </nb-card-body>
+</nb-card>

@@ -1,0 +1,89 @@
+<div *ngIf="error" class="alert alert-danger">{{error}}</div>
+<h2>Зарегистриоваться</h2>
+<nb-card>
+  <nb-card-body>
+    <form (ngSubmit)="onSubmit()" #form="ngForm" >
+      <div class="form-group">
+        <label for="name">Имя</label>
+        <input nbInput type="text" class="form-control" id="name"
+               required
+               [(ngModel)]="model.name" name="name"
+               #name="ngModel" [status]="isInvalid(name) ? 'danger' : undefined ">
+        <div class="alert text-danger" *ngIf="isInvalid(name)">
+          Имя обязательно
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="surname">Фамилия</label>
+        <input nbInput type="text" class="form-control" id="surname" required
+               [(ngModel)]="model.surname" name="surname"
+               #surname="ngModel" [status]="isInvalid(name) ? 'danger' : undefined ">
+        <div class="alert text-danger" *ngIf="isInvalid(surname)">
+          Фамилия обязательна
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="middlename">Отчество</label>
+        <input nbInput type="text" class="form-control" id="middlename"
+               [(ngModel)]="model.middlename" name="middlename"
+               #middlename="ngModel">
+      </div>
+
+      <div class="form-group">
+        <label for="phoneCode">Код телефона</label>
+        <input nbInput type="number" class="form-control" id="phoneCode" required
+               [(ngModel)]="model.phoneCode" name="phoneCode"
+               #phoneCode="ngModel">
+      </div>
+
+
+      <div class="form-group">
+        <label for="phone">телефон</label>
+        <input nbInput type="number" class="form-control" id="phone" required
+               [(ngModel)]="model.phone" name="phone"
+               #phone="ngModel">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email для входа</label>
+        <input nbInput type="text" class="form-control" id="email"
+               required
+               [(ngModel)]="model.email" name="email"
+               #email="ngModel" [status]="isInvalid(email) ? 'danger' : undefined ">
+        <div class="alert text-danger" *ngIf="isInvalid(email)">
+          Обязательно
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="contactEmail">Email для связи (виден всем)</label>
+        <input nbInput type="text" class="form-control" id="contactEmail"
+               [(ngModel)]="model.contactEmail" name="contactEmail"
+               #contactEmail="ngModel">
+      </div>
+
+
+      <div class="form-group">
+        <label for="password">Пароль</label>
+        <input nbInput type="password" class="form-control" id="password" required=""
+               [(ngModel)]="model.password" name="password" [status]="isInvalid(email) ? 'danger' : undefined "
+               #password="ngModel">
+        <div class="alert text-danger" *ngIf="isInvalid(email)">
+          Обязательно
+        </div>
+      </div>
+
+      <!--<div class="form-group">
+        <label for="password2">Повторите пароль</label>
+        <input nbInput type="password" class="form-control" groupId="password2" name="password2" #password2="ngModel">
+        <div [hidden]="password.valid && password ==  || password2.pristine" class="alert alert-danger">
+          Пароди не совдают
+        </div>
+      </div>-->
+
+      <button nbButton type="submit" class="btn btn-primary" [disabled]="!form.form.valid">Сохранить</button>
+    </form>
+  </nb-card-body>
+</nb-card>

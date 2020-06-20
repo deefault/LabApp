@@ -1,0 +1,17 @@
+<nb-card *ngIf="!loading">
+  <nb-card-header class="row">
+    <button-back class="ml-3"></button-back>
+    <div class="ml-3">{{subject.name}}</div>
+  </nb-card-header>
+  <nb-card-body>
+    {{subject.description}}
+
+  </nb-card-body>
+</nb-card>
+<nb-card>
+  <nb-card-body>
+    <nb-route-tabset [tabs]="tabs">
+    </nb-route-tabset>
+  </nb-card-body>
+</nb-card>
+<app-spinner *ngIf="loading"></app-spinner>

@@ -1,0 +1,9 @@
+<div class="container">
+  <button class="btn mt-3" nbButton status="basic" size="medium" (click)="open()">Добавить</button>
+  <nb-list>
+    <nb-list-item *ngFor="let s of students">
+      <nb-icon icon="close-outline" status="danger"></nb-icon>
+      <nb-user size="medium" name="{{s.surname + ' ' + s.name}}" class="ml-3" [picture]="s.thumbnail"></nb-user>
+    </nb-list-item>
+  </nb-list>
+</div>

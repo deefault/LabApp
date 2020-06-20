@@ -1,0 +1,16 @@
+<div class="container">
+  <button class="btn mt-3 mb-3" nbButton status="basic" (click)="goToAdd()">Добавить</button>
+  <div *ngIf="!loading;">
+    <nb-list *ngIf="items && items.length; else noLessons">
+      <nb-list-item *ngFor="let item of items" (click)="onClick(item)" class="row w-100">
+        <div class="col-10">
+          <span class="font-weight-bold">{{item.name}}</span>
+        </div>
+      </nb-list-item>
+    </nb-list>
+    <ng-template #noLessons>
+      <nb-alert class="text-center" status="info">У этого предмета нет лабораторных</nb-alert>
+    </ng-template>
+  </div>
+
+</div>

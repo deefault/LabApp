@@ -1,0 +1,32 @@
+<nb-card>
+  <nb-card-header>
+    <div class="row">
+      <button-back class="ml-3"></button-back>
+      <div class="ml-3">Добавить группу</div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <form class="form-group" (ngSubmit)="add()" #form='ngForm'>
+      <div class="form-group">
+        <label class="control-label col-form-label-lg">Имя группы</label>
+          <input nbInput type="text" class="form-control" required
+                 [(ngModel)]="item.groupName" #name="ngModel" name="name"
+                 [status]="isInvalid(name) ? 'danger' : undefined ">
+
+        <div class="alert text-danger" *ngIf="isInvalid(name)">Обязательное поле</div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-form-label-lg">Год обучения</label>
+          <input nbInput type="number" class="form-control" min="1" max="10" name="year"
+                 [(ngModel)]="item.studyYear" #year="ngModel"
+                 [status]="isInvalid(year) ? 'danger' : undefined ">
+
+        <div class="alert text-danger" *ngIf="year.touched && year.invalid">1 <= год <= 10</div>
+      </div>
+
+      <app-subject-selector (selectedChange)="item.subjectId = $event.id"></app-subject-selector>
+
+      <button nbButton type="submit" status="primary" [disabled]="!form.valid">Добавить</button>
+    </form>
+  </nb-card-body>
+</nb-card>

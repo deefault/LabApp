@@ -1,0 +1,14 @@
+<nb-card>
+  <nb-card-header>
+    <h6 class="text-center">Ваши предметы</h6>
+  </nb-card-header>
+
+  <nb-card-body>
+    <nb-list title="Предметы">
+      <nb-list-item *ngFor="let item of items" (click)="onSelect(item)">
+        <div>{{ item.subject.name }}</div>
+      </nb-list-item>
+    </nb-list>
+
+  </nb-card-body>
+</nb-card>

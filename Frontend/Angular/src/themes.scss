@@ -1,0 +1,8 @@
+@import '~@nebular/theme/styles/theming';
+@import '~@nebular/theme/styles/themes/default';
+@import '~@nebular/theme/styles/themes/dark';
+@import '~@nebular/theme/styles/themes/cosmic';
+
+$nb-themes: nb-register-theme((), default, default);
+
+$nb-themes: nb-register-theme((), dark, dark);

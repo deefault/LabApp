@@ -1,0 +1,30 @@
+<table class="table">
+  <thead>
+  <tr>
+    <th scope="col">Студент</th>
+    <th *ngFor="let assignment of items.assignments">{{assignment.name}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let e of table">
+    <th scope="row">
+      <app-user [user]="e.student"></app-user>
+    </th>
+    <td *ngFor="let a of e.assignments">
+        <div *ngIf="a; else noAssignment">
+          <ng-container>
+            <nb-icon [icon]="getStatusIcon(a.status)" [nbTooltip]="getTooltipText(a.status)"></nb-icon>
+          </ng-container>
+          <span class="ml-1" *ngIf="a.status == 3">({{a.score}})</span>
+        </div>
+        <ng-template #noAssignment>-</ng-template>
+    </td>
+  </tr>
+  </tbody>
+  <tfoot>
+  <tr>
+    <td>Максимальный балл</td>
+    <td *ngFor="let assignment of items.assignments">{{assignment.maxScore}}</td>
+  </tr>
+  </tfoot>
+</table>

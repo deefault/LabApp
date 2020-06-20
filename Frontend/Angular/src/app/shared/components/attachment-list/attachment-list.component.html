@@ -1,0 +1,31 @@
+<nb-accordion class="primary">
+  <nb-accordion-item>
+    <nb-accordion-item-header class="">
+      Вложения
+    </nb-accordion-item-header>
+    <nb-accordion-item-body>
+      <div class="row mb-3 ml-3" *ngIf="items && items.length > 0">
+        <div *ngFor="let item of items" class="mr-3">
+          <button nbButton status="basic" size="small">
+            <a [href]="app.getAttachmentUrl(item.url, item.name)" download="">
+              <button nbButton status="success" outline size="tiny" class="mr-1">
+                <nb-icon icon="file"></nb-icon>
+              </button>
+              <span class="mr-3" [nbTooltip]="getSize(item.size)">{{item.name}}</span>
+            </a>
+            <button nbButton status="danger" outline size="tiny" nbTooltip="Удалить" (click)="deleteClick(item)"
+                    *ngIf="editable">
+              <nb-icon icon="close" class="mr-0"></nb-icon>
+            </button>
+          </button>
+        </div>
+      </div>
+      <div class="row" *ngIf="editable">
+        <label for="file-upload" class="ml-3 btn-link">
+          Добавить
+        </label>
+        <input id="file-upload" type="file" (change)="change($event)" style="display: none"/>
+      </div>
+    </nb-accordion-item-body>
+  </nb-accordion-item>
+</nb-accordion>

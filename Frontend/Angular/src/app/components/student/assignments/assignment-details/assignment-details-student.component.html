@@ -1,0 +1,46 @@
+<nb-card>
+  <nb-card-header>
+  <app-back-header [text]="'Лабораторная ' + item.name" *ngIf="!loading"></app-back-header>
+  </nb-card-header>
+  <nb-card-body>
+    <div *ngIf="!loading">
+      <form class="form-group" #form="ngForm" *ngIf="!loading">
+        <div class="form-group">
+          <app-label text="Название"></app-label>
+          <input nbInput type="text" required name="name" class="form-control" [(ngModel)]="item.name" #name="ngModel"
+                 readonly
+                 fullWidth>
+        </div>
+
+        <div class="form-group">
+          <app-label text="Описание"></app-label>
+          <textarea nbInput type="text" name="description" class="form-control" [(ngModel)]="item.description"
+                    readonly fullWidth #description="ngModel">
+        </textarea>
+        </div>
+
+        <div class="form-inline">
+          <div class="form-group mr-3">
+          <app-label class="mr-3" text="Максимальный балл"></app-label>
+          <input nbInput type="number" required name="maxScore" class="form-control" [(ngModel)]="item.maxScore" width="10"
+                 readonly #maxScore="ngModel" min="0" oninput="validity.valid||(value='');">
+
+          </div>
+          <div class="form-group" *ngIf="item.fineAfterDeadline">
+            <app-label  class="mr-3" text="Штраф за просрочку"></app-label>
+          <input nbInput type="number" name="fineAfterDeadline" class="form-control"
+                 [(ngModel)]="item.fineAfterDeadline" readonly
+                 #fineAfterDeadline="ngModel" min="0" [max]="item.maxScore" [disabled]="!item.maxScore"
+                 oninput="validity.valid||(value='');">
+          </div>
+        </div>
+
+
+
+        <app-attachment-list [items]="item.attachments" [editable]="false"></app-attachment-list>
+      </form>
+    </div>
+    <app-spinner *ngIf="loading"></app-spinner>
+  </nb-card-body>
+</nb-card>
+<app-student-assignment-details [assignmentId]="item.id" [item]="item.studentAssignment" *ngIf="!loading" [groupId]="groupId"></app-student-assignment-details>

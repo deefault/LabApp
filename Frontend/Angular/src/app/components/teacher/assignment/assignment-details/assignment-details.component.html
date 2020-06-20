@@ -1,0 +1,57 @@
+<nb-card>
+  <nb-card-header>
+    <app-back-header [text]="'Лабораторная ' + item.name"></app-back-header>
+  </nb-card-header>
+  <nb-card-body>
+    <button nbButton (click)="editChange()" [status]="edit ? 'basic' : 'primary'">{{edit ? 'Отмена' : 'Редактировать'}}</button>
+    <form class="form-group" #form="ngForm" *ngIf="!loading" (ngSubmit)="submit()">
+      <div class="form-group">
+        <app-label text="Название"></app-label>
+        <input nbInput type="text" required name="name" class="form-control" [(ngModel)]="item.name" #name="ngModel"
+               [readOnly]="!edit"
+               fullWidth>
+      </div>
+
+      <div class="form-group">
+        <app-label text="Описание"></app-label>
+        <textarea nbInput type="text" name="description" class="form-control" [(ngModel)]="item.description"
+                  [readOnly]="!edit"
+                  multiple="true" fullWidth #description="ngModel">
+        </textarea>
+      </div>
+
+      <div class="form-group">
+        <app-label text="Максимальный балл"></app-label>
+        <input nbInput type="number" required name="maxScore" class="form-control" [(ngModel)]="item.maxScore"
+               [readOnly]="!edit"
+               #maxScore="ngModel" min="0" oninput="validity.valid||(value='');">
+      </div>
+
+      <div class="form-group">
+        <nb-toggle size="large" [(checked)]="item.allowAfterDeadline" [disabled]="!edit">Разрешить сдавать после
+          дедлайна
+        </nb-toggle>
+      </div>
+
+      <nb-alert outline="basic" *ngIf="item.allowAfterDeadline"
+                [nbTooltip]="(!item.maxScore) ? 'Сначала заполните максимальный балл' : null">
+        <div class="form-group">
+          <app-label text="Штрафные баллы"></app-label>
+          <input nbInput type="number" name="fineAfterDeadline" class="form-control"
+                 [(ngModel)]="item.fineAfterDeadline" [readOnly]="!edit"
+                 #fineAfterDeadline="ngModel" min="0" [max]="item.maxScore" [disabled]="!item.maxScore"
+                 oninput="validity.valid||(value='');">
+        </div>
+      </nb-alert>
+      <app-subject-selector (selectedChange)="item.subjectId = $event.id" class="mb-3" [subjectId]="item.subjectId"
+                            [readonly]="!edit"></app-subject-selector>
+      <app-attachment-list [items]="item.attachments" [editable]="true" (onAdd)="addAttachment($event)"
+                           (onDelete)="deleteAttachment($event)"></app-attachment-list>
+
+      <button [hidden]="!edit" class="mt-3" nbButton type="submit" status="primary"
+              [disabled]="form.invalid || !item.subjectId">Сохранить
+      </button>
+    </form>
+    <app-spinner *ngIf="loading"></app-spinner>
+  </nb-card-body>
+</nb-card>

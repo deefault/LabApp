@@ -1,0 +1,9 @@
+<nb-list *ngIf="items && items.length; else noItems">
+  <nb-list-item *ngFor="let item of items" (click)="onClick(item)">
+    <nb-icon [icon]="getIcon(item.studentAssignmentStatus)" *ngIf="item.studentAssignmentId" class="mr-3"></nb-icon>
+    {{item.name}}
+  </nb-list-item>
+</nb-list>
+<ng-template #noItems>
+  <nb-alert class="text-center" status="info">Нет лабораторных</nb-alert>
+</ng-template>

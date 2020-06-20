@@ -1,0 +1,13 @@
+<nb-card-header>
+  <button-back></button-back>
+</nb-card-header>
+<nb-card-body [nbSpinner]="loading">
+  <div *ngIf="!loading">
+    <h3>{{item.name}}</h3>
+    <p *ngIf="item.description">{{item.description}}</p>
+    <nb-toggle disabled [checked]="item.isPractical" labelPosition="right">Практическое занятие</nb-toggle>
+    <app-attachment-list [editable]="true" [items]="item.attachments" (onAdd)="addAttachment($event)" (onDelete)="deleteAttachment($event)">
+    </app-attachment-list>
+  </div>
+</nb-card-body>
+

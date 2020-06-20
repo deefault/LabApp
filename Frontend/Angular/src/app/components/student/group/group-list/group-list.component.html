@@ -1,0 +1,18 @@
+<nb-card>
+  <nb-card-header>
+    <button nbButton (click)="open()" status="basic" size="small">
+      <nb-icon icon="plus-circle-outline"></nb-icon>
+      Добавить
+    </button>
+  </nb-card-header>
+  <nb-card-body>
+    <nb-list title="Группы" *ngIf="items.length > 0;else noItems">
+      <nb-list-item *ngFor="let item of items" (click)="onSelect(item)">
+        <div>{{ item.groupName }}</div>
+      </nb-list-item>
+    </nb-list>
+    <ng-template #noItems>
+      <h2>У вас нет групп</h2>
+    </ng-template>
+  </nb-card-body>
+</nb-card>

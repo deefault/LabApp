@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
+    <DisableImplicitComponentsAnalyzers>true</DisableImplicitComponentsAnalyzers>
+    <RootNamespace>LabApp.Server</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Collection.EntityFrameworkCore" Version="1.0.1" />
+    <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="EntityFrameworkCore.Triggers" Version="1.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0-preview.3.20215.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DebugProxy" Version="3.2.0-rc1.20223.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0-rc1.20223.4" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.0-preview.3.20215.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.0-preview.3.20181.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0-preview.3.20181.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.0-preview.3.20181.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0-preview.3.20181.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0-preview.3.20181.2" />
+    <PackageReference Include="Npgsql" Version="4.1.3.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0-preview3" />
+    <PackageReference Include="Polly" Version="7.2.1" />
+    <PackageReference Include="SkiaSharp" Version="1.68.2-preview.50" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.3.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.3.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.3.2" />
+    <PackageReference Include="Z.EntityFramework.Plus.EFCore" Version="5.0.0-preview.3.20181.2-02" />
+  </ItemGroup>
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\LabApp.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\ViewModels\**" />
+    <Compile Remove="storage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Data\ViewModels\**" />
+    <EmbeddedResource Remove="storage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Data\ViewModels\**" />
+    <None Remove="storage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Data\ViewModels\**" />
+    <Content Remove="storage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\Admin" />
+    <Folder Include="Data\Models\Enums" />
+    <Folder Include="Migrations" />
+  </ItemGroup>
+
+
+</Project>

@@ -1,0 +1,8 @@
+<div class="form-group">
+  <nb-select required placeholder="{{placeHolderText}}" shape="round" name="subject" [disabled]="readonly"
+             [ngModel]="selected" (ngModelChange)="selectedChange.emit($event)" #subject="ngModel">
+    <nb-option *ngIf="!required" [value]="null" class="text-black-50">Не выбрано</nb-option>
+    <nb-option *ngFor="let opt of subjects" [value]="opt">{{opt.name}}</nb-option>
+  </nb-select>
+  <div class="alert text-danger" *ngIf="isInvalid(subject)">Обязательное поле</div>
+</div>

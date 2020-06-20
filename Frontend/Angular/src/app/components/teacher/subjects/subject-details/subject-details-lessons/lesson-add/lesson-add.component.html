@@ -1,0 +1,26 @@
+<nb-card>
+  <nb-card-header class="row">
+    <button-back></button-back>
+    <h6 class="ml-3">Добавить занятие</h6>
+  </nb-card-header>
+  <nb-card-body>
+    <form class="form-group" (ngSubmit)="add()">
+      <div class="form-group">
+        <label>Название</label>
+        <input nbInput type="text" [(ngModel)]="item.name" required class="ml-3" name="name">
+      </div>
+
+        <label>Описание</label>
+        <textarea nbInput type="text" [(ngModel)]="item.description" class="ml-3" name="description"></textarea>
+
+      <!-- TODO: assigment select -->
+      <div class="form-group">
+        <nb-toggle [(checked)]="item.isPractical" name="isPractical">Практическое занятие</nb-toggle>
+      </div>
+      <app-attachment-list [editable]="true" [items]="item.attachments" (onDelete)="deleteAttachment($event)"
+                           (onAdd)="addAttachment($event)">
+      </app-attachment-list>
+      <button class="mt-3" nbButton status="primary" size="medium" type="submit">Добавить</button>
+    </form>
+  </nb-card-body>
+</nb-card>

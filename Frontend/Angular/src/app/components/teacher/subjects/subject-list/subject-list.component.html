@@ -1,0 +1,17 @@
+<nb-card>
+  <nb-card-header>
+    <button nbButton (click)="router.navigate(['subjects/add'])" status="basic" size="small">
+      <nb-icon icon="plus-circle-outline"></nb-icon>
+      Добавить
+    </button>
+  </nb-card-header>
+
+  <nb-card-body>
+    <nb-list title="Предметы">
+      <nb-list-item *ngFor="let item of items" (click)="onSelect(item)">
+        <div>{{ item.name }}</div>
+      </nb-list-item>
+    </nb-list>
+
+  </nb-card-body>
+</nb-card>

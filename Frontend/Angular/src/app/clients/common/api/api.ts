@@ -1,0 +1,13 @@
+export * from './application.service';
+import { ApplicationService } from './application.service';
+export * from './authentication.service';
+import { AuthenticationService } from './authentication.service';
+export * from './chat.service';
+import { ChatService } from './chat.service';
+export * from './redirect.service';
+import { RedirectService } from './redirect.service';
+export * from './resource.service';
+import { ResourceService } from './resource.service';
+export * from './user.service';
+import { UserService } from './user.service';
+export const APIS = [ApplicationService, AuthenticationService, ChatService, RedirectService, ResourceService, UserService];

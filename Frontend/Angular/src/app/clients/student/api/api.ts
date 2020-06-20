@@ -1,0 +1,17 @@
+export * from './assignments.service';
+import { AssignmentsService } from './assignments.service';
+export * from './groups.service';
+import { GroupsService } from './groups.service';
+export * from './lessons.service';
+import { LessonsService } from './lessons.service';
+export * from './redirect.service';
+import { RedirectService } from './redirect.service';
+export * from './student.service';
+import { StudentService } from './student.service';
+export * from './subjects.service';
+import { SubjectsService } from './subjects.service';
+export * from './teacher.service';
+import { TeacherService } from './teacher.service';
+export * from './user.service';
+import { UserService } from './user.service';
+export const APIS = [AssignmentsService, GroupsService, LessonsService, RedirectService, StudentService, SubjectsService, TeacherService, UserService];

@@ -1,0 +1,13 @@
+<nb-actions>
+  <nb-action icon="home-outline"></nb-action>
+  <nb-action icon="clock-outline" badgeStatus="primary" badgePosition="top right"
+             [badgeText]="countNewAssignments"
+             nbTooltip="Новых работ на проверку" nbTooltipPlacement="bottom"
+              [routerLink]="['student-assignments']">
+  </nb-action>
+  <nb-action icon="search-outline"></nb-action>
+  <nb-action icon="edit-outline"></nb-action>
+  <nb-action>{{authService.userIdentity.Email}}</nb-action>
+  <nb-action (click)="authService.logout()" link>Выйти</nb-action>
+</nb-actions>
+

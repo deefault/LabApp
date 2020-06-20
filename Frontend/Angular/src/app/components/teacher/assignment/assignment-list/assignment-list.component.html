@@ -1,0 +1,30 @@
+<nb-card *ngIf="!subjectId; else noCard">
+  <nb-card-header>
+    <h6 class="text-center">Лабороторные</h6>
+  </nb-card-header>
+  <nb-card-body>
+    <app-spinner *ngIf="loading"></app-spinner>
+    <div class="row">
+      <div class="col-8 text-black-50 text-center">Лабораторная</div>
+      <div class="col-4 text-black-50 text-center">Предмет</div>
+    </div>
+    <nb-list *ngIf="!loading">
+      <nb-list-item *ngFor="let item of items" (click)="onClick(item)" class="row w-100">
+
+          <div class="col-8">
+            <span class="font-weight-bold">{{item.name}}</span>
+          </div>
+          <div class="col-4">{{item.subjectName}}</div>
+      </nb-list-item>
+    </nb-list>
+  </nb-card-body>
+</nb-card>
+
+<ng-template #noCard>
+  <app-spinner *ngIf="loading"></app-spinner>
+  <nb-list *ngIf="!loading">
+    <nb-list-item *ngFor="let item of items" (click)="onClick(item)">
+      <p class="font-weight-bold">{{item.name}}</p>
+    </nb-list-item>
+  </nb-list>
+</ng-template>

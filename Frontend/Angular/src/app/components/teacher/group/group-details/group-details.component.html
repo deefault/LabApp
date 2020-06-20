@@ -1,0 +1,43 @@
+<nb-card>
+  <nb-card-header>
+    <div class="row">
+      <button-back class="ml-3"></button-back>
+      <div class="ml-3">{{item.groupName}}</div>
+    </div>
+  </nb-card-header>
+  <nb-card-body>
+    <h4>Предет: {{subject.name}}</h4>
+    <h4 *ngIf="item.studyYear">Год обучения: {{item.studyYear}}</h4>
+    <!--<simple-student-list></simple-student-list>-->
+    <nb-accordion class="mt-3">
+      <nb-accordion-item>
+        <nb-accordion-item-header>Пригласить студентов</nb-accordion-item-header>
+        <nb-accordion-item-body>
+          <div class="ml-1 col-md-12">
+            <label>Код для вступления</label>
+            <div class="row">
+              <input nbInput type="text" [value]="item.inviteCode" readonly status="info" (dblclick)="copy(codeEl)"
+                     #codeEl
+                     nbTooltip="Отправьте этот код студентам">
+            </div>
+          </div>
+          <div class="mt-3 ml-1 col-md-12">
+            <label>Ссылка для вступления</label>
+            <div class="row">
+              <input nbInput status="info" type="text" [value]="getUrl()" readonly
+                     nbTooltip="Отправьте эту ссылку студентам"
+                     (dblclick)="copy(link)" #link>
+            </div>
+          </div>
+        </nb-accordion-item-body>
+      </nb-accordion-item>
+    </nb-accordion>
+    <nb-card>
+      <nb-card-body>
+        <nb-route-tabset [tabs]="tabs">
+        </nb-route-tabset>
+      </nb-card-body>
+    </nb-card>
+
+  </nb-card-body>
+</nb-card>

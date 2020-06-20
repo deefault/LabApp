@@ -1,0 +1,11 @@
+<form class="form-group" #form='ngForm' (ngSubmit)="add()">
+  <div class="alert text-danger" *ngIf="error">{{error}}</div>
+  <div>
+    <label class="control-label col-form-label-md mr-3">Email</label>
+    <input nbInput type="email" required
+           [(ngModel)]="email" name="email"/>
+    <button size="medium" nbButton class="btn ml-3" status="primary" type="submit" [disabled]="!form.valid">
+      Добавить
+    </button>
+  </div>
+</form>
