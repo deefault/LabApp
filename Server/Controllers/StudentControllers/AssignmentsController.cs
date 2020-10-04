@@ -29,7 +29,6 @@ namespace LabApp.Server.Controllers.StudentControllers
 		private readonly GroupService _groupService;
 		private readonly AssignmentService _assignmentService;
 		private readonly AttachmentService _attachmentService;
-		private readonly TeacherHub _teacherHub;
 		private readonly ConversationService _conversationService;
 
 		public AssignmentsController(AppDbContext db, IMapper mapper, IUserService userService,

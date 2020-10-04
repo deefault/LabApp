@@ -50,7 +50,7 @@ namespace LabApp.Server.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> SignOut()
+        public new async Task<IActionResult> SignOut()
         {
             await HttpContext.SignOutAsync();
             return Ok();

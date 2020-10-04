@@ -1,12 +1,11 @@
 {
   "Rabbit": {
     "BrokerName": "LabApp",
-    "QueueName": "Server",
+    "QueueName": "LabApp",
     "Username": "event-bus",
     "Password": "7YhHMxNtTpnD",
-    "HostName": "127.0.0.1",
+    "HostName": "localhost",
     "Port": 5672,
     "DispatchConsumersAsync": true
-  },
-  "AllowedHosts": "*"
+  }
 }

@@ -10,7 +10,7 @@ namespace LabApp.Server
 		private const string DefaultJwtIssuer = "http://localhost:5000";
 
 		private const string PostgresConnection =
-			"Server=127.0.0.1;Port=5434;Database=LabApp;User Id=postgres;Password=Qwerty123321;";
+			"Server=127.0.0.1;Port=5435;Database=LabApp;User Id=postgres;Password=Qwerty123321;";
 
 		private static readonly string DefaultStoragePath = Path.Combine(Directory.GetCurrentDirectory(), "storage");
 

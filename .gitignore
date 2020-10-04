@@ -13,7 +13,7 @@ Icon
 storage/attachments/*
 storage/images/*
 storage/thumbnails/*
-
+.idea/*
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd
@@ -23,6 +23,7 @@ storage/thumbnails/*
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
 
+appsettings.Development.json
 # Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop

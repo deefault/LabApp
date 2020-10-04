@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
@@ -10,25 +9,19 @@ using Microsoft.Extensions.Hosting;
 using System.Linq;
 using System.Net.Mime;
 using System.Reflection;
-using System.Text;
 using AutoMapper;
 using LabApp.Server.Data;
-using LabApp.Server.Data.Models;
 using LabApp.Server.Data.Repositories;
-using LabApp.Server.Extensions;
 using LabApp.Server.Hubs;
 using LabApp.Server.Services;
 using LabApp.Server.Services.Interfaces;
 using LabApp.Server.Services.TeacherServices;
-using LabApp.Shared.Dto;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
+using LabApp.Shared.EventBus.Extensions;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using AssignmentService = LabApp.Server.Services.StudentServices.AssignmentService;
@@ -51,18 +44,17 @@ namespace LabApp.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddControllersWithViews();
-            services.AddControllers()
-                //.AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null)
-                ;
+            services.AddControllers();
             services.AddJwtAuthentication(_env);
+           
+            
             services.AddDbContext<AppDbContext>(x =>
             {
                 x.UseLazyLoadingProxies();
                 x.UseNpgsql(AppConfiguration.ConnectionString);
             });
             //services.AddMvc();
-            services.AddSpaStaticFiles(configuration => { configuration.RootPath = "LabApp.Angular/dist"; });
+            //services.(configuration => { configuration.RootPath = "LabApp.Angular/dist"; });
 
             services.AddSwaggerGen(c =>
             {
@@ -77,20 +69,15 @@ namespace LabApp.Server
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-            services.AddResponseCompression(options =>
+            services.AddResponseCompression(options => options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
             {
-                options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
-                {
-                    MediaTypeNames.Application.Octet
-                });
-            });
-            services.Configure<FormOptions>(options =>
-            {
-                // Set the limit to 256 MB
-                options.MultipartBodyLengthLimit = 256 * 1024 * 1024;
-            });
+                MediaTypeNames.Application.Octet
+            }));
+            services.Configure<FormOptions>(options => options.MultipartBodyLengthLimit = 256 * 1024 * 1024);
             services.AddHttpContextAccessor();
             services.AddAutoMapper(typeof(Program).Assembly);
+            services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, HubUserIdProvider>();
 
             services.AddSingleton<PasswordHasher>();
             services.AddScoped<IUserService, UserService>();
@@ -105,15 +92,14 @@ namespace LabApp.Server
             services.AddScoped<LabApp.Server.Services.TeacherServices.AssignmentService>();
             services.AddScoped<StudentAssignmentService>();
             services.AddScoped<ConversationService>();
-
+            services.AddScoped<CommonHub>();
+            
             // Repositories
             services.AddScoped<IUserRepository, UserRepository>();
-            
-            services.AddSignalR();
-            services.AddSingleton<IUserIdProvider, HubUserIdProvider>();
-        }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            services.AddCommon();
+        }
+        
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
         {
             app.UseSwagger();
@@ -128,7 +114,7 @@ namespace LabApp.Server
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseWebAssemblyDebugging();
+                //app.UseWebAssemblyDebugging();
             }
             else
             {
@@ -139,33 +125,27 @@ namespace LabApp.Server
 
 
             //app.UseHttpsRedirection();
-            app.UseBlazorFrameworkFiles();
+            //app.UseBlazorFrameworkFiles();
+            app.UseDefaultFiles(new DefaultFilesOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(_env.ContentRootPath, "..", "Frontend/AngularProject/dist"))
+            });
             app.UseStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<TeacherHub>("/hubs/teacher"); // TODO
+                endpoints.MapHub<CommonHub>("/hubs/common");
+
                 endpoints.MapControllers();
-                //endpoints.MapFallbackToFile("index.html");
             });
-            app.UseSpa(spa =>
-            {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
-                spa.Options.SourcePath = "Frontend/Angular";
-
-                if (env.IsDevelopment())
-                {
-                    //spa.UseAngularCliServer(npmScript: "start");
-                    //spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
-                }
-            });
+            
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
             using (var context = serviceScope.ServiceProvider.GetService<AppDbContext>())
             {

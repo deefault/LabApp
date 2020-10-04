@@ -38,9 +38,7 @@ namespace LabApp.Server.Controllers
 			UserConversation userConv = conversation.Users.FirstOrDefault(x => x.UserId == _userService.UserId);
 			if (userConv == null) return Forbid();
 			
-			Message messageResult = _conversationService.AddMessage(id, new Message { Text = message.Text});
-			userConv.LastReadMessage = messageResult.Sent;
-			await _db.SaveChangesAsync();
+			Message messageResult = await _conversationService.AddMessageAsync(userConv, new Message { Text = message.Text});
 
 			return Ok(_mapper.Map<MessageDto>(messageResult));
 		}
