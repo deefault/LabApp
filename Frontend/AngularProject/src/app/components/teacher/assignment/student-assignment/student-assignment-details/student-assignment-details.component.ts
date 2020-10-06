@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {BaseComponent} from "../../../../../core/base-component";
 import {
   AssignmentDetailsDto,
-  AssignmentDto, AssignmentsService,
+  AssignmentsService,
   AssignmentStatus,
   StudentAssignmentDetailDto,
   StudentAssignmentsService
@@ -86,7 +86,7 @@ export class StudentAssignmentDetailsTeacherComponent extends BaseComponent impl
     });
   }
 
-  private requestChanges() {
+  requestChanges() {
     this.loading = true;
     this.studentAssignmentsService.requestChanges(this.id).subscribe(data => {
       this.item = data;

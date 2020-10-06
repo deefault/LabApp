@@ -1,5 +1,5 @@
 import {Injectable, isDevMode} from '@angular/core';
-import {HubConnection, HubConnectionBuilder, HubConnectionState} from "@microsoft/signalr";
+import {HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
 import {AuthService} from "../auth/auth.service";
 
 @Injectable({
@@ -8,17 +8,19 @@ import {AuthService} from "../auth/auth.service";
 export class SignalRService {
 
   private hubConnection: HubConnection;
-  
+
   public startConnection = () => {
+    console.log("Starting signalr connection...")
     if (this.hubConnection && this.hubConnection.state == HubConnectionState.Connected) {
       this.hubConnection.stop()
     }
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl('http://localhost:5003/hubs/common', {
+      .withUrl('http://localhost:5004/hubs/common', {
         accessTokenFactory: () => localStorage.getItem(AuthService.TokenName),
         logMessageContent: isDevMode(),
       })
       .withAutomaticReconnect()
+      .configureLogging(isDevMode() ? LogLevel.Trace : LogLevel.Information)
       .build();
     this.hubConnection
       .start()
@@ -31,7 +33,7 @@ export class SignalRService {
         this.hubConnection.stop();
       })
   }
-  
+
   public subscribeAll = () => {
     console.log("Subscribing to signalR events")
     this.hubConnection.on('transferchartdata', (data) => {

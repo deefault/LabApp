@@ -12,7 +12,7 @@ export class AppComponent {
   title = 'app';
   hideSideBar = false;
 
-  constructor(private authService: AuthService, private router: Router, private settings: SettingsService, private signalrService: SignalRService) {
+  constructor(public authService: AuthService, private router: Router, public settings: SettingsService, private signalrService: SignalRService) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (event.url == '/login' || event.url.startsWith('/register')) {
@@ -20,6 +20,14 @@ export class AppComponent {
         } else if (this.hideSideBar) this.hideSideBar = false;
       }
     });
+    this.reloadSignalR();
+    this.authService.logged.subscribe(_ => this.reloadSignalR());
+  }
+  
+  reloadSignalR() {
+      if (this.authService.isLoggedIn) {
+          this.signalrService.startConnection();
+      }
   }
 
   getThemeName(t: string): string {

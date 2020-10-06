@@ -13,7 +13,7 @@ export class SubjectListComponent implements OnInit {
 
   constructor(
     private subjectService: SubjectService,
-    private router: Router,
+    public router: Router,
     private route: ActivatedRoute
   ) {
   }

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, isDevMode, OnInit} from '@angular/core';
 import {NbWindowRef} from "@nebular/theme";
 import {GroupService} from "../../../../../../clients/teacher";
-import {HttpErrorResponse, HttpResponse} from "@angular/common/http";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-group-students-add',
@@ -27,7 +27,7 @@ export class GroupStudentsAddComponent implements OnInit {
   ngOnInit() {
   }
 
-  private add() {
+  add() {
     this.groupService.addStudent(this.groupId, this.email).subscribe(
       data => {
         this.onAdded.emit(true); //TODO: check

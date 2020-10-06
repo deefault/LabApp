@@ -10,7 +10,7 @@ namespace NotificationService.Models.Dto
         
         public int ConversationId { get; set; }
         
-        public IEnumerable<int> Users { get; set; }
+        public IEnumerable<int> Users { get; set; } = new List<int>();
 
         public string Text { get; set; }
     }

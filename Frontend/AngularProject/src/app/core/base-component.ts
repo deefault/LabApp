@@ -4,7 +4,7 @@ import {NgModel} from "@angular/forms";
 
 export class BaseComponent {
 
-  protected loading: boolean = true;
+  loading: boolean = true;
 
   protected getErrorText(error: ModelState, customText?: string) {
     return isDevMode()
@@ -12,7 +12,7 @@ export class BaseComponent {
       : customText == undefined ? "Ошибка от сервера" : customText;
   }
 
-  protected isInvalid(ngModel: NgModel) {
+  isInvalid(ngModel: NgModel) {
     return ngModel.invalid && (ngModel.dirty || ngModel.touched)
   }
 }

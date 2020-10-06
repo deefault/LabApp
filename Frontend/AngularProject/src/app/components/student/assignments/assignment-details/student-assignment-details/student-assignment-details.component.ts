@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {BaseComponent} from "../../../../../core/base-component";
 import {
-  AssignmentDetailsDtoStudent, AssignmentsService,
+  AssignmentsService,
   AssignmentStatus,
   AttachmentDto,
   StudentAssignmentDto
@@ -111,7 +111,7 @@ export class StudentAssignmentDetailsComponent extends BaseComponent implements 
     }
   }
 
-  private needReview() {
+  needReview() {
     this.assignmentsService.needReview(this.item.id).subscribe(data =>
       this.reload()
     );

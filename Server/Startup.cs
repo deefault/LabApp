@@ -1,11 +1,5 @@
 using System;
 using System.IO;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using System.Linq;
 using System.Net.Mime;
 using System.Reflection;
@@ -17,10 +11,16 @@ using LabApp.Server.Services;
 using LabApp.Server.Services.Interfaces;
 using LabApp.Server.Services.TeacherServices;
 using LabApp.Shared.EventBus.Extensions;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
@@ -123,7 +123,6 @@ namespace LabApp.Server
                 app.UseHsts();
             }
 
-
             //app.UseHttpsRedirection();
             //app.UseBlazorFrameworkFiles();
             app.UseDefaultFiles(new DefaultFilesOptions
@@ -140,19 +139,8 @@ namespace LabApp.Server
             
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<TeacherHub>("/hubs/teacher"); // TODO
-                endpoints.MapHub<CommonHub>("/hubs/common");
-
                 endpoints.MapControllers();
             });
-            
-            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            using (var context = serviceScope.ServiceProvider.GetService<AppDbContext>())
-            {
-                logger.LogInformation("Migrations started ...");
-                context.Database.Migrate();
-                logger.LogInformation("Migrations finished.");
-            }
         }
     }
 }

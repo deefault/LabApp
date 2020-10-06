@@ -84,7 +84,7 @@ export class JoinGroupDialog {
   code: string;
 
   constructor(private dialogService: NbDialogService,
-              protected dialogRef: NbDialogRef<JoinGroupDialog>,
+              public dialogRef: NbDialogRef<JoinGroupDialog>,
               private groupService: GroupsService,
   ) {
   }

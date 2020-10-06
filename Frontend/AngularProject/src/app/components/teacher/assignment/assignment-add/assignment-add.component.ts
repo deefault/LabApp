@@ -1,12 +1,6 @@
 import {Component, Input, OnInit, Optional} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {
-  AssignmentDetailsDto,
-  AssignmentDto,
-  AssignmentsService,
-  AttachmentDto,
-  SubjectDto
-} from "../../../../clients/teacher";
+import {AssignmentDetailsDto, AssignmentsService, AttachmentDto, SubjectDto} from "../../../../clients/teacher";
 import {BaseComponent} from "../../../../core/base-component";
 import {NbDialogRef} from "@nebular/theme";
 
@@ -26,7 +20,7 @@ export class AssignmentAddComponent extends BaseComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private assignmentsService: AssignmentsService,
-    @Optional() protected dialog: NbDialogRef<AssignmentAddComponent>,
+    @Optional() public dialog: NbDialogRef<AssignmentAddComponent>,
   ) {
     super();
     this.item = new class implements AssignmentDetailsDto {

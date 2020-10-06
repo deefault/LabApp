@@ -9,7 +9,7 @@ import {NgModel} from "@angular/forms";
 })
 export class SubjectSelectorComponent implements OnInit {
 
-  private subjects: SubjectDto[] = [];
+  subjects: SubjectDto[] = [];
 
   @Input() readonly: boolean = false;
   @Input() required: boolean = true;

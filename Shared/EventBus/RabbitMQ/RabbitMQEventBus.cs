@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 using LabApp.Shared.EventBus.ConfigurationExtensions;
 using LabApp.Shared.EventBus.Events.Abstractions;
 using LabApp.Shared.EventBus.Interfaces;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 using Utf8Json;
-
 
 namespace LabApp.Shared.EventBus.RabbitMQ
 {
@@ -150,6 +149,11 @@ namespace LabApp.Shared.EventBus.RabbitMQ
                 }
 
                 await ProcessEvent(eventName, message);
+            }
+            catch (OperationCanceledException e)
+            {
+                _logger.LogError(e, "Operation cancelled in Message_Recieved");
+                throw;
             }
             catch (Exception ex)
             {

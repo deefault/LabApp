@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {ApplicationService, AssignmentsService, StudentAssignmentsService} from "../../../clients/teacher";
 import {AppService} from "../../../services/app.service";
 import {AuthService} from "../../../services/auth/auth.service";
 import {SettingsService} from "../../../services/settings.service";
@@ -14,7 +13,7 @@ export class NavbarActionsTeacherComponent implements OnInit {
 
   constructor(
     private appService: AppService,
-    private authService: AuthService,
+    public authService: AuthService,
     private settings: SettingsService
   ) {
     this.appService.initTeacher.subscribe(next => {

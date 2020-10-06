@@ -31,9 +31,6 @@ export class AppService {
     this.common.getImageDownloadPath().subscribe(data => {
       this.attachmentUrl = data
     });
-    if (this.authService.isLoggedIn) {
-      this.signalrService.startConnection();
-    }
   }
 
   getAttachmentUrl(name: string, downloadName?: string) {

@@ -1,13 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using LabApp.Shared.EventBus.Events.Abstractions;
 
 namespace LabApp.Shared.EventBus
 {
 	public class SubscriptionsManager : ISubscriptionsManager
 	{
+		public static readonly List<(Type handlerType, Type interfaceType)> HandlersInAssembly = Assembly.GetEntryAssembly()
+			?.GetTypes().Where(x => x.IsClass && !x.IsAbstract)
+			.Select(x => (x, x.GetInterfaces().FirstOrDefault(i =>
+				i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IIntegrationEventHandler<>))))
+			.Where(x => x.Item2 != null)
+			.ToList();
+
 		private readonly Dictionary<string, List<Type>> _eventHandlers =
 			new Dictionary<string, List<Type>>();
 

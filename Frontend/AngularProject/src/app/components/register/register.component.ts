@@ -4,10 +4,8 @@ import {UserType} from "../../enums/user-type.enum";
 import {TeacherRegisterDto, TeacherService} from "../../clients/teacher";
 import {StudentRegisterDto, StudentService} from "../../clients/student";
 import {NgModel} from "@angular/forms";
-import {isDevMode} from '@angular/core';
 import {BaseComponent} from '../../core/base-component'
 import {HttpErrorResponse} from "@angular/common/http";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-register',
@@ -17,9 +15,9 @@ import {Observable} from "rxjs";
 export class RegisterComponent extends BaseComponent implements OnInit {
 
   private submitted: boolean;
-  private error: string;
+  error: string;
   private type: UserType;
-  private model: TeacherRegisterDto;
+  model: TeacherRegisterDto;
   private studentProfile: StudentRegisterDto;
   private teacherProfile: TeacherRegisterDto;
 

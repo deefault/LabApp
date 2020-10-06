@@ -1,3 +1,4 @@
+using System.Threading;
 using AutoMapper;
 using LabApp.Shared.EventBus.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +31,7 @@ namespace NotificationService
             
             services.AddSignalR(x => x.EnableDetailedErrors = _env.IsDevelopment());
             services.AddSingleton<IUserIdProvider, HubUserProvider>();
+            services.AddScoped<IRealtimeNotificationService, SignalRService>();
 
             services.AddAutoMapper(typeof(Program));
             
@@ -40,8 +42,6 @@ namespace NotificationService
             //services.AddScoped<CommonHub>();
             //services.AddScoped<TeacherHub>();
 
-            services.AddScoped<IRealtimeNotificationService, SignalRService>();
-
             services.AddCors(builder => builder
                 .AddPolicy("Policy", x => x 
                     .WithOrigins("http://localhost:4200", "https://localhost:5000", "http://localhost:5001")
@@ -49,11 +49,12 @@ namespace NotificationService
                     .AllowAnyHeader()
                     .AllowCredentials())
             );
-
+            Thread.Sleep(5000);
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            Thread.Sleep(5000);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

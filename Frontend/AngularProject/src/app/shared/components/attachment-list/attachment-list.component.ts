@@ -16,7 +16,7 @@ export class AttachmentListComponent implements OnInit {
   @Output() onAdd: EventEmitter<File> = new EventEmitter<File>();
 
   constructor(
-    private app: AppService
+    public app: AppService
   ) {
     this.items = [];
   }
@@ -24,18 +24,18 @@ export class AttachmentListComponent implements OnInit {
   ngOnInit() {
   }
 
-  private getSize(size: number) : string {
+  getSize(size: number) : string {
     return (size / 1024).toFixed(2) + " Kb" ;
   }
 
-  private deleteClick(attachment: AttachmentDto) {
+  deleteClick(attachment: AttachmentDto) {
     this.onDelete.emit(attachment);
   }
 
   private onSave(attachment: AttachmentDto) {
   }
 
-  private change(event: Event) {
+  change(event: Event) {
     let target = event.target as HTMLInputElement;
     if (target == null) throw new Error();
     let file: File = target.files[0];

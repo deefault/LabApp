@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Polly;
 using RabbitMQ.Client;
@@ -17,6 +18,7 @@ namespace LabApp.Shared.EventBus.RabbitMQ
 		private readonly ConnectionFactory _connectionFactory;
 		private readonly ILogger<DefaultRabbitMQPersistentConnection> _logger;
 		private readonly RabbitMqConnectionOptionsContainer _optionsContainer;
+		private readonly IHostApplicationLifetime _lifetime;
 
 		private IConnection _connection;
 		private readonly int _retryCount;
@@ -27,11 +29,13 @@ namespace LabApp.Shared.EventBus.RabbitMQ
 		private RabbitMqClientOptions Options => _optionsContainer.Options.ConsumerOptions;
 
 		public DefaultRabbitMQPersistentConnection(ConnectionFactory connectionFactory, IConfiguration configuration,
-			ILogger<DefaultRabbitMQPersistentConnection> logger, RabbitMqConnectionOptionsContainer optionsContainer)
+			ILogger<DefaultRabbitMQPersistentConnection> logger, RabbitMqConnectionOptionsContainer optionsContainer,
+			IHostApplicationLifetime hostApplicationLifetime)
 		{
 			_connectionFactory = connectionFactory ?? throw new ArgumentNullException(nameof(connectionFactory));
 			_logger = logger;
 			_optionsContainer = optionsContainer;
+			_lifetime = hostApplicationLifetime;
 			_retryCount = string.IsNullOrEmpty(configuration["EventBusRetryCount"])
 				? 5
 				: int.Parse(configuration["EventBusRetryCount"]);
@@ -44,6 +48,7 @@ namespace LabApp.Shared.EventBus.RabbitMQ
 		{
 			if (!IsConnected)
 			{
+				_logger.LogTrace("Trying to enter lock ...");
 				lock (sync)
 				{
 					if (!IsConnected)
@@ -76,6 +81,7 @@ namespace LabApp.Shared.EventBus.RabbitMQ
 						}
 					}
 				}
+				_logger.LogTrace("Lock exit");
 			}
 
 			return false;

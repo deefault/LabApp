@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
@@ -13,18 +12,11 @@ namespace NotificationService.Hubs
 
     
     [Authorize]
-    public class CommonHub : Hub
+    public class CommonHub : Hub<ICommonHubClient>
     {
         public override Task OnConnectedAsync()
         {
             return base.OnConnectedAsync();
         }
-
-        public Task NewMessage(NewMessageDto @event)
-        {
-            return Clients.Users(@event.Users.Select(x => x.ToString()))
-                .SendAsync(nameof(ICommonHubClient.NewMessage), new NewMessageDto());
-        }
-        
     }
 }

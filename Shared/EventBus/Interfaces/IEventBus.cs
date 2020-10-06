@@ -1,8 +1,9 @@
+using System;
 using LabApp.Shared.EventBus.Events.Abstractions;
 
 namespace LabApp.Shared.EventBus.Interfaces
 {
-	public interface IEventBus
+	public interface IEventBus : IDisposable
 	{
 		void Publish(IntegrationEvent @event);
 

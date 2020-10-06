@@ -1,31 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using LabApp.Shared.EventBus.Events.Abstractions;
 using LabApp.Shared.EventBus.Interfaces;
 using LabApp.Shared.EventBus.RabbitMQ;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Core.DependencyInjection;
 using RabbitMQ.Client.Core.DependencyInjection.Models;
 
-
 namespace LabApp.Shared.EventBus.Extensions
 {
     public static class IServiceCollectionExtensions
     {
-        private static readonly MethodInfo SubscribeMethod = typeof(IEventBus).GetMethod(nameof(IEventBus.Subscribe));
-
-        private static readonly List<(Type handlerType, Type interfaceType)> _handlers = Assembly.GetEntryAssembly()
-            ?.GetTypes().Where(x => x.IsClass && !x.IsAbstract)
-            .Select(x => (x, x.GetInterfaces().FirstOrDefault(i =>
-                    i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IIntegrationEventHandler<>))))
-            .Where(x => x.Item2 != null)
-            .ToList();
-
         private const string SectionName = "Rabbit";
 
         public static IServiceCollection AddCommon(this IServiceCollection services)
@@ -44,11 +32,13 @@ namespace LabApp.Shared.EventBus.Extensions
                 new DefaultRabbitMQPersistentConnection(sp.GetRequiredService<ConnectionFactory>(),
                     sp.GetRequiredService<IConfiguration>(),
                     sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>(),
-                    sp.GetRequiredService<RabbitMqConnectionOptionsContainer>()
+                    sp.GetRequiredService<RabbitMqConnectionOptionsContainer>(),
+                    sp.GetRequiredService<IHostApplicationLifetime>()
                 ));
             services.AddSingleton<ISubscriptionsManager, SubscriptionsManager>();
             services.AddSingleton<IEventBus, RabbitMQEventBus>();
             services.AddEventHandlers();
+            services.AddHostedService<EventBusSubscriptionService>();
 
             return services;
         }
@@ -56,21 +46,11 @@ namespace LabApp.Shared.EventBus.Extensions
         private static IServiceCollection AddEventHandlers(this IServiceCollection services)
         {
             // !! Add services before build ServiceProvider
-            foreach (var pair in _handlers)
+            foreach (var pair in SubscriptionsManager.HandlersInAssembly)
             {
-                services.AddScoped(pair.handlerType);
+                services.AddTransient(pair.handlerType);
             }
-            
-            // Subscribe to events
-            var sp = services.BuildServiceProvider();
-            var eventBusService = sp.GetService<IEventBus>();
-            
-            foreach (var pair in _handlers)
-            {
-                Type eventType = pair.interfaceType.GenericTypeArguments.First();
-                SubscribeMethod.MakeGenericMethod(eventType, pair.handlerType).Invoke(eventBusService, null);   
-            }
-            
+
             return services;
         }
 

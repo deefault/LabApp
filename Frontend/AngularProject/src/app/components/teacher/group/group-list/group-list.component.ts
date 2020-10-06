@@ -11,7 +11,7 @@ export class GroupListComponent implements OnInit {
   items: GroupDto[] = [];
 
   constructor(
-    private router: Router,
+    public router: Router,
     private groupService: GroupService,
   ) {
   }
