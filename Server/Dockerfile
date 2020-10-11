@@ -1,25 +1,26 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM node:14.3 as front
-COPY ../Frontend/AngularProject/package.json ./package.json
-COPY ../Frontend/AngularProject/package-lock.json ./package-lock.json
-RUN export NODE_OPTIONS="--max-old-space-size=4096" && npm install && npm install -g @angular/cli
-
-COPY ../Frontend/AngularProject/ ./web
+FROM node:12.19.0-alpine as front
 WORKDIR /web
-RUN export NODE_OPTIONS="--max-old-space-size=4096" && npm run build-prod
+COPY ./Frontend/AngularProject/package.json ./package.json
+COPY ./Frontend/AngularProject/package-lock.json ./package-lock.json
+RUN export NODE_OPTIONS="--max-old-space-size=2048" && npx npm-force-resolutions && npm install 
 
-FROM mcr.microsoft.com/dotnet/core/sdk:5.0 AS build
-WORKDIR /src
+COPY ./Frontend/AngularProject/ /web
+RUN export NODE_OPTIONS="--max-old-space-size=2048" && npm run build-prod
 
-COPY ./LabApp.Server.csproj ./LabApp.Server.csproj
-RUN dotnet restore "eShopOnContainers-ServicesAndWebApps.sln"
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /src/Server
 
-COPY . .
-WORKDIR /src/Services/Ordering/Ordering.API
-RUN dotnet publish --no-restore -c Release -o /app
+COPY ./Shared/LabApp.Shared.csproj  ../Shared/LabApp.Shared.csproj
+COPY ./Server/LabApp.Server.csproj ./LabApp.Server.csproj
+RUN dotnet restore LabApp.Server.csproj
+
+COPY ./Server .
+COPY ./Shared ../Shared
+RUN dotnet publish LabApp.Server.csproj --no-restore -c Release -o /app
 
 FROM build AS publish
 

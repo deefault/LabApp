@@ -1,6 +1,7 @@
 import {Injectable, isDevMode} from '@angular/core';
 import {HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
 import {AuthService} from "../auth/auth.service";
+import {environment} from "../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,9 @@ export class SignalRService {
     if (this.hubConnection && this.hubConnection.state == HubConnectionState.Connected) {
       this.hubConnection.stop()
     }
+    
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl('http://localhost:5004/hubs/common', {
+      .withUrl(`${environment.baseUrl}/hubs/common`, {
         accessTokenFactory: () => localStorage.getItem(AuthService.TokenName),
         logMessageContent: isDevMode(),
       })

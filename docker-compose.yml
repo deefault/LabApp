@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+
+  postgres:
+    image: postgres:12
+    ports:
+    - 5435:5432
+    volumes:
+    - /home/postgres:/var/lib/postgresql/data
+    environment:
+      - POSGRES_PASSWORD=Qwerty123321
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+    - 8080:15672
+    - 5672:5672
+
+  server:
+    build:
+      context: .
+      dockerfile: Server/Dockerfile
+      args:
+        - configuration=production

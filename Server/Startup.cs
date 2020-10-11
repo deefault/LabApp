@@ -98,6 +98,15 @@ namespace LabApp.Server
             services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddCommon();
+            
+            services.AddCors(builder => builder
+                .AddPolicy("Policy", x => x 
+                    .WithOrigins("http://localhost:4200", "https://localhost:5000", "http://localhost:5001", 
+                        "http://localhost:80", "https://localhost:443")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials())
+            );
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
@@ -127,13 +136,17 @@ namespace LabApp.Server
             //app.UseBlazorFrameworkFiles();
             app.UseDefaultFiles(new DefaultFilesOptions
             {
-                FileProvider = new PhysicalFileProvider(
-                    Path.Combine(_env.ContentRootPath, "..", "Frontend/AngularProject/dist"))
+                FileProvider = new CompositeFileProvider(
+                    new PhysicalFileProvider(Path.Combine(_env.ContentRootPath, "..", "Frontend/AngularProject/dist")),
+                    new PhysicalFileProvider(Path.Combine(_env.ContentRootPath, "wwwroot/dist")),
+                    new PhysicalFileProvider("wwwroot/dist")
+                    )
             });
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseCors("Policy");
             app.UseAuthentication();
             app.UseAuthorization();
             

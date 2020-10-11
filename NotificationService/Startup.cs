@@ -44,7 +44,8 @@ namespace NotificationService
 
             services.AddCors(builder => builder
                 .AddPolicy("Policy", x => x 
-                    .WithOrigins("http://localhost:4200", "https://localhost:5000", "http://localhost:5001")
+                    .WithOrigins("http://localhost:4200", "https://localhost:5000", "http://localhost:5001", 
+                        "http://localhost:80", "https://localhost:443")
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     .AllowCredentials())

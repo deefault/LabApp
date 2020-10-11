@@ -1,4 +1,5 @@
 .dockerignore
+Dockerfile
 .env
 .git
 .gitignore
@@ -19,3 +20,4 @@ docker-compose*.yml
 **/dist/
 .DS_Store
 *.sln.DotSettings.user
+/wwwroot/dist

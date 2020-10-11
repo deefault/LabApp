@@ -214,25 +214,25 @@ export function tokenGetter() {
     {
       provide: BASE_PATH,
       useFactory: () => {
-        return 'http://localhost:4200'
+        return environment.baseUrl;
       }
     },
     {
       provide: TEACHER_BASE_PATH,
       useFactory: () => {
-        return 'http://localhost:4200'
+          return environment.baseUrl;
       }
     },
     {
       provide: STUDENT_BASE_PATH,
       useFactory: () => {
-        return 'http://localhost:4200'
+          return environment.baseUrl;
       }
     },
     {
       provide: COMMON_BASE_PATH,
       useFactory: () => {
-        return 'http://localhost:4200'
+          return environment.baseUrl;
       }
     },
     SettingsService,
