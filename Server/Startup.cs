@@ -134,14 +134,13 @@ namespace LabApp.Server
 
             //app.UseHttpsRedirection();
             //app.UseBlazorFrameworkFiles();
-            app.UseDefaultFiles(new DefaultFilesOptions
+            /*app.UseDefaultFiles(new DefaultFilesOptions
             {
                 FileProvider = new CompositeFileProvider(
-                    new PhysicalFileProvider(Path.Combine(_env.ContentRootPath, "..", "Frontend/AngularProject/dist")),
                     new PhysicalFileProvider(Path.Combine(_env.ContentRootPath, "wwwroot/dist")),
                     new PhysicalFileProvider("wwwroot/dist")
                     )
-            });
+            });*/
             app.UseStaticFiles();
 
             app.UseRouting();

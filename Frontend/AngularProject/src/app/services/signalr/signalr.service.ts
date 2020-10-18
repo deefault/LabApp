@@ -17,7 +17,7 @@ export class SignalRService {
     }
     
     this.hubConnection = new HubConnectionBuilder()
-      .withUrl(`${environment.baseUrl}/hubs/common`, {
+      .withUrl(`${environment.signalRUrl}/hubs/common`, {
         accessTokenFactory: () => localStorage.getItem(AuthService.TokenName),
         logMessageContent: isDevMode(),
       })

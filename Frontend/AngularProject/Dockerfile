@@ -9,6 +9,5 @@ COPY ./Frontend/AngularProject/ /web
 RUN export NODE_OPTIONS="--max-old-space-size=2048" && npm run build -- --configuration=$configuration
 
 FROM nginx:1.16
-COPY --from=front /app/dist/ /usr/share/nginx/html
-# Copy the default nginx.conf provided by tiangolo/node-frontend
-COPY --from=front /nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=front /web/dist/ /usr/share/nginx/html
+COPY --from=front /web/nginx.conf /etc/nginx/conf.d/default.conf

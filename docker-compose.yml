@@ -1,7 +1,6 @@
 version: '2'
 
 services:
-
   postgres:
     image: postgres:12
     ports:
@@ -9,17 +8,56 @@ services:
     volumes:
     - /home/postgres:/var/lib/postgresql/data
     environment:
-      - POSGRES_PASSWORD=Qwerty123321
-
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Qwerty123321
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
     - 8080:15672
     - 5672:5672
-
+    volumes:
+    - /home/rabbitmq_data:/var/lib/rabbitmq
+    - $PWD/init-rabbitmq.sh:/init-rabbitmq.sh
+    environment:
+      - RABBITMQ_DEFAULT_USER=event-bus
+      - RABBITMQ_DEFAULT_PASS=7YhHMxNtTpnD
+      - RABBITMQ_USER=event-bus
+      - RABBITMQ_PASSWORD=7YhHMxNtTpnD
+      #- RABBITMQ_PID_FILE=/var/lib/rabbitmq/mnesia/rabbitmq
+    #command: /init-rabbitmq.sh
   server:
+    depends_on:
+      - postgres
+      - rabbitmq
     build:
       context: .
-      dockerfile: Server/Dockerfile
+      dockerfile: Server/server.Dockerfile
+    environment:
+      - ConnectionString=Server=postgres;Port=5432;Database=LabApp;User Id=postgres;Password=Qwerty123321;
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Rabbit:HostName=rabbitmq
+    ports:
+    - 5001:80
+  notification_service:
+    depends_on:
+      - postgres
+      - rabbitmq
+    build:
+      context: .
+      dockerfile: NotificationService/notification.Dockerfile
+    environment:
+      - ConnectionString=Server=postgres;Port=5432;Database=LabApp;User Id=postgres;Password=Qwerty123321;
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Rabbit:HostName=rabbitmq
+    ports:
+      - 5004:80
+  web:
+    depends_on:
+      - server
+    build:
+      context: .
+      dockerfile: Frontend/AngularProject/Dockerfile
       args:
         - configuration=production
+    ports:
+    - 4200:80

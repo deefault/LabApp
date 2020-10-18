@@ -68,7 +68,7 @@
     <Folder Include="Controllers\Admin" />
     <Folder Include="Data\Models\Enums" />
     <Folder Include="Migrations" />
-    <Folder Include="wwwroot" />
+    <Folder Include="wwwroot\dist" />
   </ItemGroup>
 
   <ItemGroup>
