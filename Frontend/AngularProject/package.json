@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
+    "dev": "ng serve --proxy-config proxy.docker.conf.json",
     "build": "ng build",
     "build-prod": "ng build --prod",
     "build:ssr": "ng run LabApp.Angular:server:dev",
