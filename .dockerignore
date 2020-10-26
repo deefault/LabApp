@@ -1,12 +1,10 @@
 .dockerignore
-Dockerfile
 .env
 .git
 .gitignore
 .vs
 .vscode
 .idea
-docker-compose*.yml
 *.md
 **/test-results/
 *.testsettings
@@ -21,3 +19,6 @@ docker-compose*.yml
 .DS_Store
 *.sln.DotSettings.user
 /wwwroot/dist
+.idea
+**/Dockerfile // Docker files
+**/docker-compose // Docker files

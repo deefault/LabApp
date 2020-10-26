@@ -1,4 +1,9 @@
-version: '2'
+version: '3.4'
+
+volumes:
+  pg_data:
+  mq_data:
+  resources:
 
 services:
   postgres:
@@ -6,9 +11,9 @@ services:
     ports:
     - 5435:5432
     volumes:
-    - /home/postgres:/var/lib/postgresql/data
-    - $PWD/init-dev-db.sh:/docker-entrypoint-initdb.d/init-dev-db.sh
-    - $PWD/init.bac:/init.bac
+    - pg_data:/var/lib/postgresql/data
+    - ./init-dev-db.sh:/docker-entrypoint-initdb.d/init-dev-db.sh
+    - ./init.bac:/init.bac
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Qwerty123321
@@ -19,7 +24,7 @@ services:
     - 8080:15672
     - 5672:5672
     volumes:
-    - /home/rabbitmq_data:/var/lib/rabbitmq
+    - mq_data:/var/lib/rabbitmq
     - $PWD/init-rabbitmq.sh:/init-rabbitmq.sh
     environment:
       - RABBITMQ_DEFAULT_USER=event-bus
@@ -39,6 +44,7 @@ services:
       - ConnectionString=Server=postgres;Port=5432;Database=LabApp;User Id=postgres;Password=Qwerty123321;
       - ASPNETCORE_ENVIRONMENT=Development
       - Rabbit:HostName=rabbitmq
+      - SeqUrl=http://seq:5341
     ports:
     - 5001:80
   notification_service:
@@ -52,6 +58,7 @@ services:
       - ConnectionString=Server=postgres;Port=5432;Database=LabApp;User Id=postgres;Password=Qwerty123321;
       - ASPNETCORE_ENVIRONMENT=Development
       - Rabbit:HostName=rabbitmq
+      - SeqUrl=http://seq:5341
     ports:
       - 5004:80
   web:
@@ -64,3 +71,10 @@ services:
         - configuration=production
     ports:
     - 4200:80
+  
+  seq:
+    image: datalust/seq:latest
+    ports:
+    - 5341:80
+    environment:
+    - ACCEPT_EULA=Y

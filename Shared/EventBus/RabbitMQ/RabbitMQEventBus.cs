@@ -4,12 +4,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using LabApp.Shared.EventBus.ConfigurationExtensions;
 using LabApp.Shared.EventBus.Events.Abstractions;
 using LabApp.Shared.EventBus.Interfaces;
+using LabApp.Shared.Infrastructure.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -27,23 +28,23 @@ namespace LabApp.Shared.EventBus.RabbitMQ
 
         private readonly string _queueName;
         private readonly int _retryCount;
+        private readonly string _brokerName;
+        
         private IModel _consumerChannel;
 
-        private readonly string BROKER_NAME;
-
         public RabbitMQEventBus(IConfiguration configuration, IRabbitMQPersistentConnection persistentConnection,
-            ILogger<RabbitMQEventBus> logger, ISubscriptionsManager subscriptionsManager,
+            ILogger<RabbitMQEventBus> logger, ISubscriptionsManager subscriptionsManager, IOptions<RabbitMqOptions> options,
             IServiceScopeFactory scopeFactory)
         {
             _persistentConnection = persistentConnection;
             _logger = logger;
             _subscriptionsManager = subscriptionsManager;
             _scopeFactory = scopeFactory;
-            _queueName = configuration.GetQueueName();
+            _queueName = options.Value.QueueName;
             _retryCount = 5;
             if (configuration["EventBusRetryCount"] != null)
                 _retryCount = int.Parse(configuration["EventBusRetryCount"]);
-            BROKER_NAME = configuration.GetBrokerName();
+            _brokerName = options.Value.BrokerName;
             _consumerChannel = CreateConsumerChannel();
         }
 
@@ -71,7 +72,7 @@ namespace LabApp.Shared.EventBus.RabbitMQ
             {
                 _logger.LogTrace("Declaring RabbitMQ exchange to publish event: {EventId}", @event.Id);
 
-                channel.ExchangeDeclare(exchange: BROKER_NAME, type: "direct");
+                channel.ExchangeDeclare(exchange: _brokerName, type: "direct");
                 byte[] body = JsonSerializer.NonGeneric.Serialize(eventType, @event);
 
                 policy.Execute(() =>
@@ -82,7 +83,7 @@ namespace LabApp.Shared.EventBus.RabbitMQ
                     _logger.LogTrace("Publishing event to RabbitMQ: {EventId}", @event.Id);
 
                     channel.BasicPublish(
-                        exchange: BROKER_NAME,
+                        exchange: _brokerName,
                         routingKey: eventType.Name,
                         mandatory: true,
                         basicProperties: properties,
@@ -103,7 +104,7 @@ namespace LabApp.Shared.EventBus.RabbitMQ
                 using (var channel = _persistentConnection.CreateModel())
                 {
                     channel.QueueBind(_queueName,
-                        exchange: BROKER_NAME,
+                        exchange: _brokerName,
                         routingKey: eventName);
                 }
             }
@@ -222,7 +223,7 @@ namespace LabApp.Shared.EventBus.RabbitMQ
 
             var channel = _persistentConnection.CreateModel();
 
-            channel.ExchangeDeclare(exchange: BROKER_NAME,
+            channel.ExchangeDeclare(exchange: _brokerName,
                 type: "direct");
 
             channel.QueueDeclare(queue: _queueName,

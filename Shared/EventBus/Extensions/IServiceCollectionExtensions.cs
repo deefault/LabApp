@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using LabApp.Shared.EventBus.Interfaces;
 using LabApp.Shared.EventBus.RabbitMQ;
+using LabApp.Shared.Infrastructure.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -14,19 +15,17 @@ namespace LabApp.Shared.EventBus.Extensions
 {
     public static class IServiceCollectionExtensions
     {
-        private const string SectionName = "Rabbit";
-
-        public static IServiceCollection AddCommon(this IServiceCollection services)
+        public static IServiceCollection AddCommon(this IServiceCollection services, IConfiguration configuration)
         {
             if (services.Any(x => x.ServiceType == typeof(IEventBus))) return services;
-            IConfiguration configuration = services.BuildServiceProvider().GetService<IConfiguration>();
-
-            services.AddRabbitMqClient(configuration.GetSection(SectionName));
+            services.AddConfigurations(configuration);
+            
+            services.AddRabbitMqClient(configuration.GetSection(RabbitMqOptions.Key));
             services.AddSingleton<ConnectionFactory>(x =>
             {
                 var factory = new ConnectionFactory();
 
-                return factory.ConfigureFromSection(configuration.GetSection(SectionName));
+                return factory.ConfigureFromSection(configuration.GetSection(RabbitMqOptions.Key));
             });
             services.AddSingleton<IRabbitMQPersistentConnection, DefaultRabbitMQPersistentConnection>(sp =>
                 new DefaultRabbitMQPersistentConnection(sp.GetRequiredService<ConnectionFactory>(),
