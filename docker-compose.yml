@@ -46,7 +46,7 @@ services:
       - Rabbit:HostName=rabbitmq
       - SeqUrl=http://seq:5341
     ports:
-    - 5001:80
+    - 5000:80
   notification_service:
     depends_on:
       - postgres

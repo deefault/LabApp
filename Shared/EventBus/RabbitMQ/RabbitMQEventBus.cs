@@ -123,7 +123,7 @@ namespace LabApp.Shared.EventBus.RabbitMQ
             {
                 var consumer = new AsyncEventingBasicConsumer(_consumerChannel);
 
-                consumer.Received += Message_Recieved;
+                consumer.Received += Message_Received;
 
                 var _ = _consumerChannel.BasicConsume(
                     queue: _queueName,
@@ -136,7 +136,7 @@ namespace LabApp.Shared.EventBus.RabbitMQ
             }
         }
 
-        private async Task Message_Recieved(object sender, BasicDeliverEventArgs eventArgs)
+        private async Task Message_Received(object sender, BasicDeliverEventArgs eventArgs)
         {
             _logger.LogDebug("Message recieved");
             var eventName = eventArgs.RoutingKey;

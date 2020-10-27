@@ -50,12 +50,10 @@ namespace NotificationService
                     .AllowAnyHeader()
                     .AllowCredentials())
             );
-            Thread.Sleep(5000);
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            Thread.Sleep(5000);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

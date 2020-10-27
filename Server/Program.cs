@@ -12,7 +12,7 @@ namespace LabApp.Server
 {
     public class Program
     {
-        public static int Main(string[] args)
+        public static void Main(string[] args)
         {
             DefaultLogger.CreateNlog(null);
             var logger = DefaultLogger.CreateNlog(null);
@@ -34,14 +34,14 @@ namespace LabApp.Server
             {
                 logger.Error(exception, "Stopped program because of exception");
                 
-                return 1;
+               // return 1;
             }
             finally
             {
                 NLog.LogManager.Shutdown();
             }
 
-            return 0;
+            //return 0;
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
