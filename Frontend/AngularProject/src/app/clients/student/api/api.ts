@@ -1,3 +1,5 @@
+export * from './application.service';
+import { ApplicationService } from './application.service';
 export * from './assignments.service';
 import { AssignmentsService } from './assignments.service';
 export * from './groups.service';
@@ -14,4 +16,4 @@ export * from './teacher.service';
 import { TeacherService } from './teacher.service';
 export * from './user.service';
 import { UserService } from './user.service';
-export const APIS = [AssignmentsService, GroupsService, LessonsService, RedirectService, StudentService, SubjectsService, TeacherService, UserService];
+export const APIS = [ApplicationService, AssignmentsService, GroupsService, LessonsService, RedirectService, StudentService, SubjectsService, TeacherService, UserService];

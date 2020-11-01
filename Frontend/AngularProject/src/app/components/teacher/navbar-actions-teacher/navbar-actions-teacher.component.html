@@ -1,5 +1,6 @@
 <nb-actions>
   <nb-action icon="home-outline"></nb-action>
+  <nb-action icon="message-circle-outline" [badgeText]="messages ? messages.toString() : ''" badgeStatus="primary"></nb-action>
   <nb-action icon="clock-outline" badgeStatus="primary" badgePosition="top right"
              [badgeText]="countNewAssignments"
              nbTooltip="Новых работ на проверку" nbTooltipPlacement="bottom"

@@ -12,7 +12,6 @@
 import { AttachmentDto } from './attachmentDto';
 
 export interface AssignmentDetailsDto { 
-    attachments?: Array<AttachmentDto>;
     id?: number;
     subjectId: number;
     subjectName?: string;
@@ -24,4 +23,5 @@ export interface AssignmentDetailsDto {
     isHidden?: boolean;
     start?: Date;
     deadLine?: Date;
+    attachments?: Array<AttachmentDto>;
 }

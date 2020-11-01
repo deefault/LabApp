@@ -7,6 +7,7 @@ using AutoMapper;
 using LabApp.Server.Data;
 using LabApp.Server.Data.Repositories;
 using LabApp.Server.Hubs;
+using LabApp.Server.Infrastructure.Swagger.Filters;
 using LabApp.Server.Services;
 using LabApp.Server.Services.Interfaces;
 using LabApp.Server.Services.TeacherServices;
@@ -58,6 +59,7 @@ namespace LabApp.Server
 
             services.AddSwaggerGen(c =>
             {
+                c.SchemaFilter<AutoRestSchemaFilter>();
                 c.CustomOperationIds(apiDesc => apiDesc.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null);
                 //c.DescribeAllParametersInCamelCase();
                 c.SwaggerDoc("teacher", new OpenApiInfo { Title = "Teacher api", Version = "v1" });
@@ -120,6 +122,15 @@ namespace LabApp.Server
                 x.SwaggerEndpoint("/swagger/student/swagger.json", "Student Api");
                 x.SwaggerEndpoint("/swagger/common/swagger.json", "Common Api");
             });
+            app.UseReDoc(x =>
+            {
+                x.RoutePrefix = "api-docs";
+                x.ExpandResponses("200, 201");
+                x.SpecUrl("/swagger/teacher/swagger.json");
+                x.SpecUrl("/swagger/student/swagger.json");
+                x.SpecUrl("/swagger/common/swagger.json");
+            });
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

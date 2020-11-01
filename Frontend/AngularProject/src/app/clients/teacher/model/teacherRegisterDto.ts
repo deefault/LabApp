@@ -11,7 +11,6 @@
  */
 
 export interface TeacherRegisterDto { 
-    academicRankId?: number;
     email: string;
     phoneCode: number;
     phone: number;
@@ -21,4 +20,5 @@ export interface TeacherRegisterDto {
     surname: string;
     middlename?: string;
     dateBirth?: Date;
+    academicRankId?: number;
 }

@@ -39,7 +39,7 @@ export class LessonDetailsComponent extends BaseComponent implements OnInit {
   }
 
   addAttachment(event: File) {
-    this.lessonsService.addAttachment(this.id, event).subscribe(data => {
+    this.lessonsService.addAttachmentForm(this.id, event).subscribe(data => {
         this.item.attachments.push(data);
       },
       error => {

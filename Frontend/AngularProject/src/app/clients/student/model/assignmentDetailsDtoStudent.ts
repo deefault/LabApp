@@ -14,8 +14,6 @@ import { AttachmentDto } from './attachmentDto';
 import { StudentAssignmentDto } from './studentAssignmentDto';
 
 export interface AssignmentDetailsDtoStudent { 
-    studentAssignment?: StudentAssignmentDto;
-    attachments?: Array<AttachmentDto>;
     id?: number;
     subjectId?: number;
     name?: string;
@@ -27,4 +25,6 @@ export interface AssignmentDetailsDtoStudent {
     fineAfterDeadline?: number;
     studentAssignmentId?: number;
     studentAssignmentStatus?: AssignmentStatus;
+    studentAssignment?: StudentAssignmentDto;
+    attachments?: Array<AttachmentDto>;
 }

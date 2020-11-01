@@ -9,6 +9,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <TypeScriptCompile Include="src\app\models\events\new-message.ts" />
+      <TypeScriptCompile Include="src\app\shared\components\NavBarBase.ts" />
       <TypeScriptCompile Include="src\main.ts" />
       <TypeScriptCompile Include="src\polyfills.ts" />
       <TypeScriptCompile Include="src\test.ts" />

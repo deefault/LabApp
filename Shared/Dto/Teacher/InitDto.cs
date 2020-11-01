@@ -1,6 +1,6 @@
 namespace LabApp.Shared.Dto.Teacher
 {
-	public class InitDto
+	public class InitDtoTeacher : InitDto
 	{
 		public int NewAssignmentsCount { get; set; }
 	}

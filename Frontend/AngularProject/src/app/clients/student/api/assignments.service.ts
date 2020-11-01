@@ -425,10 +425,10 @@ export class AssignmentsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public uploadAttachment(file?: Blob, assignmentId?: number, observe?: 'body', reportProgress?: boolean): Observable<AttachmentDto>;
-    public uploadAttachment(file?: Blob, assignmentId?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AttachmentDto>>;
-    public uploadAttachment(file?: Blob, assignmentId?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AttachmentDto>>;
-    public uploadAttachment(file?: Blob, assignmentId?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public uploadAttachmentForm(file?: Blob, assignmentId?: number, observe?: 'body', reportProgress?: boolean): Observable<AttachmentDto>;
+    public uploadAttachmentForm(file?: Blob, assignmentId?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AttachmentDto>>;
+    public uploadAttachmentForm(file?: Blob, assignmentId?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AttachmentDto>>;
+    public uploadAttachmentForm(file?: Blob, assignmentId?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
 

@@ -5,10 +5,7 @@
       <ng-container *ngIf="authService.isLoggedIn; else notLogged" #logged>
         <app-navbar-actions-teacher *ngIf="authService.isTeacher; else studentActions"></app-navbar-actions-teacher>
         <ng-template #studentActions>
-          <nb-actions>
-            <nb-action>{{authService.userIdentity.Email}}</nb-action>
-            <nb-action (click)="authService.logout()" link>Выйти</nb-action>
-          </nb-actions>
+          <app-navbar-actions-student></app-navbar-actions-student>
         </ng-template>
       </ng-container>
       <ng-template #notLogged>

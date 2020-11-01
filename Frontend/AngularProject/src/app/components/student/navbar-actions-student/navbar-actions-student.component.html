@@ -1,0 +1,5 @@
+<nb-actions>
+    <nb-action icon="message-circle-outline" [badgeText]="messages ? messages.toString() : ''" badgeStatus="primary"></nb-action>
+    <nb-action>{{authService.userIdentity.Email}}</nb-action>
+    <nb-action (click)="authService.logout()" link>Выйти</nb-action>
+</nb-actions>

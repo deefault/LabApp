@@ -9,17 +9,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { ImageDto } from './imageDto';
 
-export interface TeacherProfileDto { 
-    userId?: number;
-    name?: string;
-    surname?: string;
-    middlename?: string;
-    contactEmail?: string;
-    dateBirth?: Date;
-    mainPhoto?: ImageDto;
-    readonly fullName?: string;
-    academicRankName?: string;
-    academicRankId?: number;
+export interface InitDtoTeacher { 
+    newMessages?: number;
+    newAssignmentsCount?: number;
 }

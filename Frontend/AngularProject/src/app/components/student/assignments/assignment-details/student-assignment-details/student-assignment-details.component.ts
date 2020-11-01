@@ -130,7 +130,7 @@ export class StudentAssignmentDetailsComponent extends BaseComponent implements 
   }
 
   addAttachment(event: File) {
-    this.assignmentsService.uploadAttachment(event, this.item.id).subscribe(data => {
+    this.assignmentsService.uploadAttachmentForm(event, this.item.id).subscribe(data => {
       this.item.attachments.push(data);
     })
   }

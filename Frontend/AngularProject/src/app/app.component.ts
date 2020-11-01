@@ -11,8 +11,9 @@ import {SignalRService} from "./services/signalr/signalr.service";
 export class AppComponent {
   title = 'app';
   hideSideBar = false;
+  newMessages: number = 0;
 
-  constructor(public authService: AuthService, private router: Router, public settings: SettingsService, private signalrService: SignalRService) {
+  constructor(public authService: AuthService, private router: Router, public settings: SettingsService, private signalrService: SignalRService,) {
     router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (event.url == '/login' || event.url.startsWith('/register')) {
@@ -22,6 +23,8 @@ export class AppComponent {
     });
     this.reloadSignalR();
     this.authService.logged.subscribe(_ => this.reloadSignalR());
+    
+    this.signalrService.newMessage.subscribe(_ => this.newMessages++);
   }
   
   reloadSignalR() {

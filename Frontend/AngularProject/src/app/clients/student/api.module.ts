@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
+import { ApplicationService } from './api/application.service';
 import { AssignmentsService } from './api/assignments.service';
 import { GroupsService } from './api/groups.service';
 import { LessonsService } from './api/lessons.service';
@@ -17,6 +18,7 @@ import { UserService } from './api/user.service';
   declarations: [],
   exports:      [],
   providers: [
+    ApplicationService,
     AssignmentsService,
     GroupsService,
     LessonsService,

@@ -9,20 +9,20 @@ using LabApp.Server.Data.Models.ManyToMany;
 using LabApp.Server.Services;
 using LabApp.Server.Services.Interfaces;
 using LabApp.Shared.Dto;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LabApp.Server.Controllers
 {
+	[Authorize]
 	public class ChatController : BaseCommonController
 	{
-		private readonly AppDbContext _db;
 		private readonly ConversationService _conversationService;
 		private readonly IUserService _userService;
 		private readonly IMapper _mapper;
 
-		public ChatController(AppDbContext db, ConversationService conversationService, IUserService userService, IMapper mapper)
+		public ChatController(ConversationService conversationService, IUserService userService, IMapper mapper)
 		{
-			_db = db;
 			_conversationService = conversationService;
 			_userService = userService;
 			_mapper = mapper;
@@ -32,13 +32,10 @@ namespace LabApp.Server.Controllers
 		[ProducesResponseType(typeof(MessageDto), 200)]
 		public async Task<IActionResult> AddMessage(int id, MessageDto message)
 		{
-			// TODO: attachments
-			Conversation conversation = _conversationService.GetById(id);
-			if (conversation == null) return NotFound();
-			UserConversation userConv = conversation.Users.FirstOrDefault(x => x.UserId == _userService.UserId);
-			if (userConv == null) return Forbid();
+			UserConversation conversation = _conversationService.GetUserConversation(id);
+			if (conversation == null) return Forbid();
 			
-			Message messageResult = await _conversationService.AddMessageAsync(userConv, new Message { Text = message.Text});
+			Message messageResult = await _conversationService.AddMessageAsync(conversation, new Message { Text = message.Text});
 
 			return Ok(_mapper.Map<MessageDto>(messageResult));
 		}
@@ -47,11 +44,13 @@ namespace LabApp.Server.Controllers
 		[ProducesResponseType(typeof(ConversationDto), 200)]
 		public IActionResult GetConversation(int id)
 		{
-			Conversation conversation = _conversationService.GetById(id);
-			if (conversation == null) return NotFound();
-			if (conversation.Users.All(x => x.UserId != _userService.UserId)) return Forbid();
-			
-			return Ok(_mapper.Map<ConversationDto>(conversation));
+			UserConversation conversation = _conversationService.GetUserConversation(id);
+			if (conversation == null) return Forbid();
+
+			var result = _mapper.Map<ConversationDto>(conversation.Conversation);
+			result.LastReadMessage = conversation.LastReadMessage;
+
+			return Ok(result);
 		}
 		
 		[HttpGet]
@@ -67,14 +66,24 @@ namespace LabApp.Server.Controllers
 		[ProducesResponseType(typeof(IEnumerable<MessageDto>), 200)]
 		public async Task<IActionResult> GetMessages(int id)
 		{
-			Conversation conversation = _conversationService.GetById(id);
-			if (conversation == null) return NotFound();
-			if (conversation.Users.All(x => x.UserId != _userService.UserId)) return Forbid();
+			UserConversation conversation = _conversationService.GetUserConversation(id);
+			if (conversation == null) return Forbid();
 
 			IEnumerable<Message> messages = await _conversationService.GetMessages(id);
 
 			return Ok(_mapper.Map<IEnumerable<MessageDto>>(messages.Reverse()));
 		}
 		
+		[HttpGet("{id}/messages/read")]
+		[ProducesResponseType(typeof(int), 200)]
+		public async Task<IActionResult> ReadMessages(int id)
+		{
+			UserConversation conversation = _conversationService.GetUserConversation(id);
+			if (conversation == null) return Forbid();
+			
+			int res = await _conversationService.ReadAllMessagesAsync(conversation);
+
+			return Ok(res);
+		}
 	}
 }

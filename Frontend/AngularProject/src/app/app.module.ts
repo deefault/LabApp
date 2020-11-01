@@ -96,6 +96,7 @@ import { StudentAssignmentListAllComponent } from './components/teacher/assignme
 import {StudentAssignmentDetailsTeacherComponent} from "./components/teacher/assignment/student-assignment/student-assignment-details/student-assignment-details.component";
 import { ConversationComponent } from './shared/components/conversation/conversation.component';
 import { GroupTableComponent } from './components/teacher/group/group-details/group-table/group-table.component';
+import { NavbarActionsStudentComponent } from './components/student/navbar-actions-student/navbar-actions-student.component';
 
 
 export function tokenGetter() {
@@ -154,7 +155,8 @@ export function tokenGetter() {
     StudentAssignmentListAllComponent,
     StudentAssignmentDetailsTeacherComponent,
     ConversationComponent,
-    GroupTableComponent
+    GroupTableComponent,
+    NavbarActionsStudentComponent
   ],
   entryComponents: [
     GroupStudentsAddComponent,

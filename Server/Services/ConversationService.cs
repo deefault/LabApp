@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -105,10 +106,31 @@ namespace LabApp.Server.Services
         {
             userConversation.LastReadMessage = message.Sent;
         }
+        
+        public async Task<int> ReadAllMessagesAsync(UserConversation userConversation)
+        {
+            var transaction = await _db.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
+            var count = await CountNewAsync(userConversation);
+            userConversation.LastReadMessage = DateTime.UtcNow;
+            await _db.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return count;
+        }
 
         public async Task<int> CountNewAsync(UserConversation conversation)
         {
             return await CountNew(conversation).CountAsync();
+        }
+        
+        public async Task<int> CountNewAsync()
+        {
+            var userId = _userService.UserId;
+
+            return await _db.UserConversation.Where(x => x.UserId == userId)
+                .SelectMany(x => x.Conversation.Messages,
+                    (c, m) => new {LastRead = c.LastReadMessage, Sent = m.Sent})
+                .Where(x => x.Sent > x.LastRead).CountAsync();
         }
 
         private IQueryable<Message> CountNew(UserConversation conversation)
@@ -121,7 +143,7 @@ namespace LabApp.Server.Services
         public Conversation GetById(int id)
         {
             return _db.Conversations
-                .Include(x => x.Users)
+                .Include(x => x.Users.Where(y => y.UserId == _userService.UserId))
                 .ThenInclude(x => x.User)
                 .FirstOrDefault(x => x.Id == id);
         }
@@ -138,6 +160,17 @@ namespace LabApp.Server.Services
                     CountNew = CountNew(x).Count()
                 })
                 .ToList();
+        }
+
+        public UserConversation GetUserConversation(int id, bool includeUsers = false)
+        {
+            var result = _db.UserConversation
+                .Include(x => x.Conversation);
+
+            if (includeUsers) result.ThenInclude(x => x.Users);
+            
+            return  result.FirstOrDefault(x => x.ConversationId == id && x.UserId == _userService.UserId);
+
         }
     }
 }

@@ -155,6 +155,44 @@ export class ChatService {
     /**
      * 
      * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getConversations(observe?: 'body', reportProgress?: boolean): Observable<Array<ConversationDto>>;
+    public getConversations(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ConversationDto>>>;
+    public getConversations(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ConversationDto>>>;
+    public getConversations(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<ConversationDto>>('get',`${this.basePath}/api/Chat/GetConversations`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param id 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -186,6 +224,49 @@ export class ChatService {
         ];
 
         return this.httpClient.request<Array<MessageDto>>('get',`${this.basePath}/api/Chat/GetMessages/${encodeURIComponent(String(id))}/messages`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param id 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public readMessages(id: number, observe?: 'body', reportProgress?: boolean): Observable<number>;
+    public readMessages(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
+    public readMessages(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
+    public readMessages(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (id === null || id === undefined) {
+            throw new Error('Required parameter id was null or undefined when calling readMessages.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/plain',
+            'application/json',
+            'text/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<number>('get',`${this.basePath}/api/Chat/ReadMessages/${encodeURIComponent(String(id))}/messages/read`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

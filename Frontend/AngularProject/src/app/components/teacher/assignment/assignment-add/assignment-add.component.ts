@@ -57,7 +57,7 @@ export class AssignmentAddComponent extends BaseComponent implements OnInit {
   }
 
   addAttachment(file: File) {
-    this.assignmentsService.uploadAttachment(file).subscribe(data => {
+    this.assignmentsService.uploadAttachmentForm(file).subscribe(data => {
       this.item.attachments.push(data);
     });
   }

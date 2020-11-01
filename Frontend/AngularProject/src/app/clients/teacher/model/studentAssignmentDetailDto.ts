@@ -14,9 +14,6 @@ import { AttachmentDto } from './attachmentDto';
 import { UserListDto } from './userListDto';
 
 export interface StudentAssignmentDetailDto { 
-    body?: string;
-    teacherComment?: string;
-    attachments?: Array<AttachmentDto>;
     id?: number;
     assignmentId?: number;
     groupId?: number;
@@ -30,4 +27,7 @@ export interface StudentAssignmentDetailDto {
     student?: UserListDto;
     groupName?: string;
     assignmentName?: string;
+    body?: string;
+    teacherComment?: string;
+    attachments?: Array<AttachmentDto>;
 }

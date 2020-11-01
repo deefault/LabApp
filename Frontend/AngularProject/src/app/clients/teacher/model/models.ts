@@ -13,7 +13,7 @@ export * from './groupDto';
 export * from './groupTableDto';
 export * from './groupTableEntryDto';
 export * from './imageDto';
-export * from './initDto';
+export * from './initDtoTeacher';
 export * from './lessonDto';
 export * from './studentAssignmentDetailDto';
 export * from './studentAssignmentDto';

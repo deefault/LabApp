@@ -8,6 +8,7 @@ export * from './conversationType';
 export * from './groupDto';
 export * from './groupSubjectDto';
 export * from './imageDto';
+export * from './initDtoStudent';
 export * from './lessonDto';
 export * from './studentAssignmentDto';
 export * from './studentProfileDto';

@@ -69,7 +69,7 @@ export class LessonAddComponent extends BaseComponent implements OnInit {
 
   addAttachment(event: File) {
     this.loading = true;
-    this.lessonService.uploadAttachment(event).subscribe(data => {
+    this.lessonService.uploadAttachmentForm(event).subscribe(data => {
         this.item.attachments.push(data);
         this.loading = false;
       },

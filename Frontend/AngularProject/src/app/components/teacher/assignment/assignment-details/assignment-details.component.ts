@@ -28,7 +28,7 @@ export class AssignmentDetailsComponent extends BaseComponent implements OnInit 
   }
 
   addAttachment($event: File) {
-    this.assignmentsService.addAttachment(this.id, $event).subscribe(data => this.item.attachments.push(data));
+    this.assignmentsService.addAttachmentForm(this.id, $event).subscribe(data => this.item.attachments.push(data));
   }
 
   deleteAttachment($event: AttachmentDto) {

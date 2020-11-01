@@ -152,10 +152,10 @@ export class LessonsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public addAttachment(lessonId: number, file?: Blob, observe?: 'body', reportProgress?: boolean): Observable<AttachmentDto>;
-    public addAttachment(lessonId: number, file?: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AttachmentDto>>;
-    public addAttachment(lessonId: number, file?: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AttachmentDto>>;
-    public addAttachment(lessonId: number, file?: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public addAttachmentForm(lessonId: number, file?: Blob, observe?: 'body', reportProgress?: boolean): Observable<AttachmentDto>;
+    public addAttachmentForm(lessonId: number, file?: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AttachmentDto>>;
+    public addAttachmentForm(lessonId: number, file?: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AttachmentDto>>;
+    public addAttachmentForm(lessonId: number, file?: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (lessonId === null || lessonId === undefined) {
             throw new Error('Required parameter lessonId was null or undefined when calling addAttachment.');
@@ -485,10 +485,10 @@ export class LessonsService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public uploadAttachment(file?: Blob, observe?: 'body', reportProgress?: boolean): Observable<AttachmentDto>;
-    public uploadAttachment(file?: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AttachmentDto>>;
-    public uploadAttachment(file?: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AttachmentDto>>;
-    public uploadAttachment(file?: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public uploadAttachmentForm(file?: Blob, observe?: 'body', reportProgress?: boolean): Observable<AttachmentDto>;
+    public uploadAttachmentForm(file?: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AttachmentDto>>;
+    public uploadAttachmentForm(file?: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AttachmentDto>>;
+    public uploadAttachmentForm(file?: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let headers = this.defaultHeaders;

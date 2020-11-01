@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using LabApp.Server.Controllers.Internal;
 using LabApp.Server.Services.TeacherServices;
+using LabApp.Shared.Dto.Student;
 using LabApp.Shared.Dto.Teacher;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -28,10 +29,10 @@ namespace LabApp.Server.Controllers.TeacherControllers
         }
 
         [HttpGet("init")]
-        [ProducesResponseType(typeof(InitDto), 200)]
-        public async Task<InitDto> Init()
+        [ProducesResponseType(typeof(InitDtoTeacher), 200)]
+        public async Task<InitDtoTeacher> Init()
         {
-            return new InitDto{NewAssignmentsCount = await _studentAssignmentService.CountAsync(onlyNew: true)};
+            return new InitDtoTeacher{NewAssignmentsCount = await _studentAssignmentService.CountAsync(onlyNew: true)};
         } 
     }
 }

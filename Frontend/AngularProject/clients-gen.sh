@@ -1,17 +1,26 @@
 #!/usr/bin/env bash
 
-BASE_PATH='./src/app/clients'
+BASE_PATH='/local/src/app/clients'
 
 gen_student () {
-  swagger-codegen generate -i http://localhost:5000/swagger/student/swagger.json -o "${BASE_PATH}/student" -l typescript-angular
+  docker run --network=host --rm -v ${PWD}:/local swaggerapi/swagger-codegen-cli-v3 generate \
+       -i http://localhost:5000/swagger/student/swagger.json \
+        -l typescript-angular \
+        -o "${BASE_PATH}/student" 
 }
 
 gen_teacher () {
-  swagger-codegen generate -i http://localhost:5000/swagger/teacher/swagger.json -o "${BASE_PATH}/teacher" -l typescript-angular
+  docker run --network=host --rm -v ${PWD}:/local swaggerapi/swagger-codegen-cli-v3 generate \
+          -i http://localhost:5000/swagger/teacher/swagger.json \
+           -l typescript-angular \
+           -o "${BASE_PATH}/teacher" 
 }
 
 gen_common () {
-  swagger-codegen generate -i http://localhost:5000/swagger/common/swagger.json -o "${BASE_PATH}/common" -l typescript-angular
+  docker run --network=host --rm -v ${PWD}:/local swaggerapi/swagger-codegen-cli-v3 generate \
+         -i http://localhost:5000/swagger/common/swagger.json \
+          -l typescript-angular \
+          -o "${BASE_PATH}/common" 
 }
 
 gen_all() {

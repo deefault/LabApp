@@ -15,5 +15,7 @@ namespace LabApp.Shared.Dto
 		public IEnumerable<UserListDto> Users { get; set; }
 
 		public DateTime Inserted { get; set; } = DateTime.UtcNow;
+		
+		public DateTime? LastReadMessage { get; set; }
 	}
 }

@@ -1,7 +1,9 @@
-import {Injectable, isDevMode} from '@angular/core';
+import {EventEmitter, Injectable, isDevMode} from '@angular/core';
 import {HubConnection, HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
 import {AuthService} from "../auth/auth.service";
 import {environment} from "../../../environments/environment";
+import {NewMessage} from "../../models/events/new-message";
+import {EventBusService} from "../event-bus.service";
 
 @Injectable({
   providedIn: 'root'
@@ -9,13 +11,18 @@ import {environment} from "../../../environments/environment";
 export class SignalRService {
 
   private hubConnection: HubConnection;
+  public newMessage: EventEmitter<NewMessage> = new EventEmitter<NewMessage>();
+
+
+  constructor(private eventBus: EventBusService) {
+  }
 
   public startConnection = () => {
     console.log("Starting signalr connection...")
     if (this.hubConnection && this.hubConnection.state == HubConnectionState.Connected) {
       this.hubConnection.stop()
     }
-    
+
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(`${environment.signalRUrl}/hubs/common`, {
         accessTokenFactory: () => localStorage.getItem(AuthService.TokenName),
@@ -38,19 +45,11 @@ export class SignalRService {
 
   public subscribeAll = () => {
     console.log("Subscribing to signalR events")
-    this.hubConnection.on('transferchartdata', (data) => {
-      console.log(data);
-    });
-    this.hubConnection.on('transferchartdata', (data) => {
-      console.log(data);
-    });
 
-    this.hubConnection.on('NewMessage', (data) => {
+    this.hubConnection.on('newMessage', (data: NewMessage) => {
       console.log(data);
-    });
-
-    this.hubConnection.on('newMessage', (data) => {
-      console.log(data);
+      this.newMessage.emit(data);
+      this.eventBus.changeNewMessageNumber.emit(1);
     });
   }
 }

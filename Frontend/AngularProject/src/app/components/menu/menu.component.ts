@@ -31,6 +31,11 @@ export class MenuComponent implements OnInit {
       title: 'На проверку',
       icon: 'bulb-outline',
       link: '/student-assignments',
+    },
+    {
+      title: 'Сообщения',
+      icon: 'message-circle-outline\n',
+      link: '/messages',
     }
   ]
 
@@ -44,6 +49,11 @@ export class MenuComponent implements OnInit {
       title: 'Группы',
       icon: 'person-outline',
       link: '/student/groups',
+    },
+    {
+      title: 'Сообщения',
+      icon: 'message-circle-outline\n',
+      link: '/student/messages',
     }
   ]
   items: any = [];
