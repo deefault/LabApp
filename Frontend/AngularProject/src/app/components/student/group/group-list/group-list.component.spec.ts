@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { GroupListComponent } from './group-list.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {GroupListComponent} from "../../../teacher/group/group-list/group-list.component";
+import {NbListModule} from "@nebular/theme";
 
 describe('GroupListComponent', () => {
   let component: GroupListComponent;
@@ -8,9 +8,10 @@ describe('GroupListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GroupListComponent ]
+      declarations: [GroupListComponent],
+      imports: [NbListModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

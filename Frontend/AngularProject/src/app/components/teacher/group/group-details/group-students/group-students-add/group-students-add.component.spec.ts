@@ -1,6 +1,7 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { GroupStudentsAddComponent } from './group-students-add.component';
+import {GroupStudentsAddComponent} from './group-students-add.component';
+import {NbInputModule} from "@nebular/theme";
 
 describe('GroupStudentsAddComponent', () => {
   let component: GroupStudentsAddComponent;
@@ -8,9 +9,10 @@ describe('GroupStudentsAddComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GroupStudentsAddComponent ]
+      declarations: [GroupStudentsAddComponent],
+      imports: [NbInputModule]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

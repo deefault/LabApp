@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StudentAssignmentListAllComponent } from './student-assignment-list-all.component';
+import {NbCardModule, NbToggleModule} from "@nebular/theme";
 
 describe('StudentAssignmentListNewComponent', () => {
   let component: StudentAssignmentListAllComponent;
@@ -8,7 +9,8 @@ describe('StudentAssignmentListNewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StudentAssignmentListAllComponent ]
+      declarations: [ StudentAssignmentListAllComponent ],
+      imports: [NbToggleModule, NbCardModule]
     })
     .compileComponents();
   }));
