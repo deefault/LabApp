@@ -1,0 +1,29 @@
+<nb-layout>
+    <nb-layout-column>
+        <nb-spinner *ngIf="loading"></nb-spinner>
+
+        <nb-card style="background-color: white">
+            <nb-list>
+                <nb-list-item *ngFor="let item of items" (click)="selected = item;selectedChange.emit(selected)" 
+                    [ngStyle]="item == selected ? {'background-color': '#dee6f1'} : {}"
+                >
+
+
+                    <p *ngIf="item.name">{{item.name}}</p>
+                    <nb-user [name]="item.lastMessageUser.name + ' ' + item.lastMessageUser.surname"
+                             [title]="item.lastMessage.text"
+                             [picture]="item.lastMessageUser.thumbnail" badgeStatus="primary"
+                             [badgeText]="item.newMessages ? item.newMessages.toString() : ''">
+                    </nb-user>
+                </nb-list-item>
+            </nb-list>
+        </nb-card>
+    </nb-layout-column>
+    <nb-layout-column [ngStyle]="!selected ? {'background-color':'white'} : {}">
+        <app-conversation *ngIf="selected;else notSelected" [conversationId]="selected.id"></app-conversation>
+        <ng-template #notSelected>
+            Выберите чат
+        </ng-template>
+    </nb-layout-column>
+
+</nb-layout>

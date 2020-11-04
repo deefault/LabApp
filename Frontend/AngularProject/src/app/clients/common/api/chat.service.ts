@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { ConversationDto } from '../model/conversationDto';
+import { ConversationWithLastMessageDto } from '../model/conversationWithLastMessageDto';
 import { MessageDto } from '../model/messageDto';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -158,9 +159,9 @@ export class ChatService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getConversations(observe?: 'body', reportProgress?: boolean): Observable<Array<ConversationDto>>;
-    public getConversations(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ConversationDto>>>;
-    public getConversations(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ConversationDto>>>;
+    public getConversations(observe?: 'body', reportProgress?: boolean): Observable<Array<ConversationWithLastMessageDto>>;
+    public getConversations(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ConversationWithLastMessageDto>>>;
+    public getConversations(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ConversationWithLastMessageDto>>>;
     public getConversations(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -180,7 +181,7 @@ export class ChatService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<ConversationDto>>('get',`${this.basePath}/api/Chat/GetConversations`,
+        return this.httpClient.request<Array<ConversationWithLastMessageDto>>('get',`${this.basePath}/api/Chat/GetConversations`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

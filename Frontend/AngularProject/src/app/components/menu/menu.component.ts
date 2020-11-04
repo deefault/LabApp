@@ -1,8 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from "../../services/auth/auth.service";
-import {NbMenuItem, NbThemeService} from "@nebular/theme";
-import {SettingsService} from "../../services/settings.service";
-import {ApplicationService} from "../../clients/teacher";
+import {NbMenuItem} from "@nebular/theme";
+
+
+const chatItem: NbMenuItem = {
+  title: 'Сообщения',
+  icon: 'message-circle-outline',
+  link: '/chats',
+};
 
 @Component({
   selector: 'app-menu',
@@ -32,11 +37,7 @@ export class MenuComponent implements OnInit {
       icon: 'bulb-outline',
       link: '/student-assignments',
     },
-    {
-      title: 'Сообщения',
-      icon: 'message-circle-outline\n',
-      link: '/messages',
-    }
+    chatItem
   ]
 
   studentItems: NbMenuItem[] = [
@@ -50,19 +51,12 @@ export class MenuComponent implements OnInit {
       icon: 'person-outline',
       link: '/student/groups',
     },
-    {
-      title: 'Сообщения',
-      icon: 'message-circle-outline\n',
-      link: '/student/messages',
-    }
+    chatItem
   ]
   items: any = [];
 
   constructor(
     private authService: AuthService,
-    private themeService: NbThemeService,
-    private settings: SettingsService,
-    private appService: ApplicationService,
   ) {
   }
 

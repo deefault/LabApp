@@ -5,7 +5,7 @@ import {EventEmitter, Injectable} from '@angular/core';
 })
 export class EventBusService {
 
-  public changeNewMessageNumber: EventEmitter<number> = new EventEmitter<number>();
+  public changeNewMessageNumber: EventEmitter<{conversationId: number, num: number}> = new EventEmitter<{conversationId: number, num: number}>();
   
   constructor() { }
 }

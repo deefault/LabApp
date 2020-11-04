@@ -1,12 +1,12 @@
-<nb-chat status="info" size="giant" #chatComponent (focusin)="readAll()" (mouseenter)="readAll()">
-  <nb-chat-message *ngFor="let message of messages" [message]="message.text"
-                   [date]="message.sent"
-                   [sender]="message.userId == me.userId ? getName(me) : getName(other)"
-                   [reply]="message.userId == me.userId"
-                   [avatar]="message.userId == me.userId ? me.thumbnail : other.thumbnail"
-                   id="message-{{message.id}}"
-                   type="text">
-  </nb-chat-message>
-  <nb-chat-form (send)="sendMessage($event)">
-  </nb-chat-form>
+<nb-chat status="info" size="giant" #chatComponent (focusin)="readAll()" id="chat-comp">
+    <nb-chat-message *ngFor="let message of messages" [message]="message.text"
+                     [date]="message.sent"
+                     [sender]="message.userId == me.userId ? getName(me) : getName(other)"
+                     [reply]="message.userId == me.userId"
+                     [avatar]="message.userId == me.userId ? me.thumbnail : other.thumbnail"
+                     id="message-{{message.id}}"
+                     type="text">
+    </nb-chat-message>
+    <nb-chat-form (send)="sendMessage($event)">
+    </nb-chat-form>
 </nb-chat>

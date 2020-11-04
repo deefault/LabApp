@@ -97,6 +97,7 @@ import {StudentAssignmentDetailsTeacherComponent} from "./components/teacher/ass
 import { ConversationComponent } from './shared/components/conversation/conversation.component';
 import { GroupTableComponent } from './components/teacher/group/group-details/group-table/group-table.component';
 import { NavbarActionsStudentComponent } from './components/student/navbar-actions-student/navbar-actions-student.component';
+import { ConversationListComponent } from './shared/components/conversation-list/conversation-list.component';
 
 
 export function tokenGetter() {
@@ -156,7 +157,8 @@ export function tokenGetter() {
     StudentAssignmentDetailsTeacherComponent,
     ConversationComponent,
     GroupTableComponent,
-    NavbarActionsStudentComponent
+    NavbarActionsStudentComponent,
+    ConversationListComponent
   ],
   entryComponents: [
     GroupStudentsAddComponent,

@@ -8,8 +8,10 @@ using AutoMapper;
 using LabApp.Server.Data;
 using LabApp.Server.Data.Models;
 using LabApp.Server.Data.Models.ManyToMany;
+using LabApp.Server.Data.QueryModels;
 using LabApp.Server.Hubs;
 using LabApp.Server.Services.Interfaces;
+using LabApp.Shared.Dto;
 using LabApp.Shared.Enums;
 using LabApp.Shared.EventBus.Events;
 using LabApp.Shared.EventBus.Interfaces;
@@ -65,7 +67,7 @@ namespace LabApp.Server.Services
         public async Task<Message> AddMessageAsync(UserConversation conversation, Message message)
         {
             await using var transaction = await _db.Database.BeginTransactionAsync();
-            
+
             message.ConversationId = conversation.ConversationId;
             message.Sent = DateTime.UtcNow;
             message.UserId = _userService.UserId;
@@ -78,7 +80,7 @@ namespace LabApp.Server.Services
                 MessageId = message.Id, Users = GetAllOtherUsers(conversation), UserId = _userService.UserId,
                 ConversationId = conversation.ConversationId, Text = message.Text
             });
-            
+
             await transaction.CommitAsync();
 
             // foreach (int userId in GetAllOtherUsers(conversation)) TODO: DELETE
@@ -106,7 +108,7 @@ namespace LabApp.Server.Services
         {
             userConversation.LastReadMessage = message.Sent;
         }
-        
+
         public async Task<int> ReadAllMessagesAsync(UserConversation userConversation)
         {
             var transaction = await _db.Database.BeginTransactionAsync(IsolationLevel.RepeatableRead);
@@ -122,7 +124,7 @@ namespace LabApp.Server.Services
         {
             return await CountNew(conversation).CountAsync();
         }
-        
+
         public async Task<int> CountNewAsync()
         {
             var userId = _userService.UserId;
@@ -147,30 +149,36 @@ namespace LabApp.Server.Services
                 .ThenInclude(x => x.User)
                 .FirstOrDefault(x => x.Id == id);
         }
-
-        public dynamic ListAsync(int userId)
+        
+        public async Task<IEnumerable<ConversationWithLastMessage>> ListAsync(int userId)
         {
-            return _db.UserConversation.Where(x => x.UserId == userId)
+            return await _db.UserConversation.Where(x => x.UserId == userId)
                 .Select(x => new
                 {
-                    Conversation = x.Conversation,
-                    LastMessage = _db.Messages.Where(y => y.ConversationId == x.ConversationId)
-                        .OrderByDescending(y => y.Sent).FirstOrDefault(),
-                    LastReadMessageDate = x.LastReadMessage,
-                    CountNew = CountNew(x).Count()
+                    UserConversation = x,
+                    LastMessaage = x.Conversation.Messages.OrderByDescending(y => y.Sent).FirstOrDefault()
                 })
-                .ToList();
+                .Select(x => new ConversationWithLastMessage
+                {
+                    Id = x.UserConversation.Conversation.Id,
+                    Name = x.UserConversation.Conversation.Name,
+                    NewMessages = x.UserConversation.Conversation.Messages.Count(m =>
+                        m.UserId != _userService.UserId && m.Sent > x.UserConversation.LastReadMessage),
+                    LastMessage = x.LastMessaage,
+                    LastMessageUser = x.LastMessaage.User,
+                    Type = x.UserConversation.Conversation.Type,
+                })
+                .ToListAsync();
         }
-
+        
         public UserConversation GetUserConversation(int id, bool includeUsers = false)
         {
             var result = _db.UserConversation
                 .Include(x => x.Conversation);
 
             if (includeUsers) result.ThenInclude(x => x.Users);
-            
-            return  result.FirstOrDefault(x => x.ConversationId == id && x.UserId == _userService.UserId);
 
+            return result.FirstOrDefault(x => x.ConversationId == id && x.UserId == _userService.UserId);
         }
     }
 }

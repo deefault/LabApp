@@ -15,7 +15,7 @@ export class NavBarBase implements OnInit {
 
   ngOnInit(): void {
     this.eventBus.changeNewMessageNumber.subscribe(n => {
-      if (Math.abs(n) > this.messages) {
+      if (n < 0 && Math.abs(n) > this.messages) {
         this.messages = 0;
       } else {
         this.messages += n;

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using LabApp.Shared.Dto;
 
 namespace NotificationService.Models.Dto
 {
@@ -8,7 +10,11 @@ namespace NotificationService.Models.Dto
         
         public int UserId { get; set; }
         
+        public UserListDto User { get; set; }
+        
         public int ConversationId { get; set; }
+        
+        public DateTime Sent { get; set; }
         
         public IEnumerable<int> Users { get; set; } = new List<int>();
 

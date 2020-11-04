@@ -131,10 +131,10 @@ export class UserService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public uploadMainPhoto(file?: Blob, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public uploadMainPhoto(file?: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public uploadMainPhoto(file?: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public uploadMainPhoto(file?: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public uploadMainPhotoForm(file?: Blob, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public uploadMainPhotoForm(file?: Blob, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public uploadMainPhotoForm(file?: Blob, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public uploadMainPhotoForm(file?: Blob, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let headers = this.defaultHeaders;

@@ -49,7 +49,7 @@ export class SignalRService {
     this.hubConnection.on('newMessage', (data: NewMessage) => {
       console.log(data);
       this.newMessage.emit(data);
-      this.eventBus.changeNewMessageNumber.emit(1);
+      this.eventBus.changeNewMessageNumber.emit({conversationId: data.ConversationId, num: 1});
     });
   }
 }

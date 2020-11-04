@@ -6,6 +6,7 @@ using LabApp.Server.Controllers.Internal;
 using LabApp.Server.Data;
 using LabApp.Server.Data.Models;
 using LabApp.Server.Data.Models.ManyToMany;
+using LabApp.Server.Data.QueryModels;
 using LabApp.Server.Services;
 using LabApp.Server.Services.Interfaces;
 using LabApp.Shared.Dto;
@@ -54,12 +55,12 @@ namespace LabApp.Server.Controllers
 		}
 		
 		[HttpGet]
-		[ProducesResponseType(typeof(IEnumerable<ConversationDto>), 200)]
-		public IActionResult GetConversations()
+		[ProducesResponseType(typeof(IEnumerable<ConversationWithLastMessageDto>), 200)]
+		public async Task<IActionResult> GetConversations()
 		{
-			var conversation = _conversationService.ListAsync(_userService.UserId);
-			// TODO
-			return Ok(_mapper.Map<ConversationDto>(conversation));
+			IEnumerable<ConversationWithLastMessage> conversations = await _conversationService.ListAsync(_userService.UserId);
+			
+			return Ok(_mapper.Map<IEnumerable<ConversationWithLastMessageDto>>(conversations));
 		}
 		
 		[HttpGet("{id}/messages")]

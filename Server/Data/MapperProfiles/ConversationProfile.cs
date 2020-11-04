@@ -2,6 +2,7 @@ using System.Linq;
 using AutoMapper;
 using LabApp.Server.Data.Models;
 using LabApp.Server.Data.Models.ManyToMany;
+using LabApp.Server.Data.QueryModels;
 using LabApp.Shared.Dto;
 
 namespace LabApp.Server.Data.MapperProfiles
@@ -21,6 +22,8 @@ namespace LabApp.Server.Data.MapperProfiles
 			CreateMap<Conversation, ConversationDto>()
 				.ForMember(x => x.Users, opt => opt.MapFrom(src => src.Users));
 			CreateMap<Message, MessageDto>();
+
+			CreateMap<ConversationWithLastMessage, ConversationWithLastMessageDto>();
 		}
 	}
 }

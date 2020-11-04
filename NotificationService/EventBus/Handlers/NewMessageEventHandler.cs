@@ -27,9 +27,11 @@ namespace NotificationService.EventBus.Handlers
         protected override async Task HandleInternal(NewMessageEvent @event)
         {
             Logger.LogInformation("Recieved new message event {messageId}", @event.MessageId);
-
+            var data = _mapper.Map<NewMessageDto>(@event);
+            //TODO fill dto: get from database
+            
             await _sp.GetRequiredService<IHubContext<CommonHub, ICommonHubClient>>().Clients
-                .Users(@event.Users.Select(x => x.ToString())).NewMessage(_mapper.Map<NewMessageDto>(@event));
+                .Users(@event.Users.Select(x => x.ToString())).NewMessage(data);
         }
     }
 }

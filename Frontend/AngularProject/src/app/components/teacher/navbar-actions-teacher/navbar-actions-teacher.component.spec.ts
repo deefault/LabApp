@@ -37,7 +37,7 @@ describe('NavbarActionsTeacherComponent', () => {
   it('should add new messages', () => {
     component.messages = 5;
     component.ngOnInit();
-    bus.changeNewMessageNumber.emit(10);
+    bus.changeNewMessageNumber.emit({num: 10, conversationId: 3});
 
     expect(component.messages).toBe(15);
 

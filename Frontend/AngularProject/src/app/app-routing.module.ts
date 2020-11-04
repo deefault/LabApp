@@ -27,7 +27,8 @@ import {AssignmentDetailsStudentComponent} from "./components/student/assignment
 import {StudentAssignmentListAllComponent} from "./components/teacher/assignment/student-assignment/student-assignment-list-all/student-assignment-list-all.component";
 import {StudentAssignmentDetailsComponent} from "./components/student/assignments/assignment-details/student-assignment-details/student-assignment-details.component";
 import {StudentAssignmentDetailsTeacherComponent} from "./components/teacher/assignment/student-assignment/student-assignment-details/student-assignment-details.component";
-import {GroupTableComponent} from "./components/teacher/group/group-details/group-table/group-table.component"; // CLI imports router
+import {GroupTableComponent} from "./components/teacher/group/group-details/group-table/group-table.component";
+import {ConversationListComponent} from "./shared/components/conversation-list/conversation-list.component"; // CLI imports router
 
 const routes: Routes = [
   {path: 'login', component: LoginComponent},
@@ -82,6 +83,9 @@ const routes: Routes = [
         {path: '', component: StudentAssignmentListAllComponent},
         {path: ':id', component: StudentAssignmentDetailsTeacherComponent}
       ]
+  },
+  {
+    path: 'chats', component: ConversationListComponent
   },
   // STUDENT
   {
