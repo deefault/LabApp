@@ -1,6 +1,6 @@
 using System;
-using LabApp.Server.Data.Models.Abstractions;
 using EntityFrameworkCore.Triggers;
+using LabApp.Server.Data.Models.Interfaces;
 
 namespace LabApp.Server.Data.Triggers
 {

@@ -36,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LabApp.DbContext\LabApp.DbContext.csproj" />
     <ProjectReference Include="..\Shared\LabApp.Shared.csproj" />
   </ItemGroup>
   
