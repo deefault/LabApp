@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {AuthService} from "../services/auth/auth.service";
 import {Observable, throwError} from "rxjs";
-import {catchError} from "rxjs/operators";
+import {catchError, map} from "rxjs/operators";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -15,7 +15,14 @@ export class TokenInterceptor implements HttpInterceptor {
       request = TokenInterceptor.addToken(request,localStorage.getItem(AuthService.TokenName));
     }
 
-    return next.handle(request);
+    return next.handle(request).pipe(
+      map((event: HttpEvent<any>) => {
+        if (event instanceof HttpErrorResponse && event.status == 401) {
+          this.authService.logout();
+        }
+        return event;
+      })
+    );
   }
 
   private static addToken(request: HttpRequest<any>, token: string) {
