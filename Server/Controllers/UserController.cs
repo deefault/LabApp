@@ -1,24 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using LabApp.Server.Controllers.Internal;
 using LabApp.Server.Data;
-using LabApp.Server.Data.Models;
 using LabApp.Server.Data.Repositories;
-using LabApp.Server.Services;
+using LabApp.Server.Services.ImageService;
 using LabApp.Server.Services.Interfaces;
 using LabApp.Shared.Dto;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LabApp.Server.Controllers
@@ -48,7 +39,7 @@ namespace LabApp.Server.Controllers
         {
             return Ok();
         }
-        
+
         [HttpPost]
         public new async Task<IActionResult> SignOut()
         {
@@ -65,11 +56,19 @@ namespace LabApp.Server.Controllers
                 ModelState.AddModelError(nameof(file), "Error");
             }
 
+            if (!file.ContentType.Contains("image", StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError(nameof(file), "Not an image");
+            }
+
             try
             {
-                (string image, string thumb) = await _imageService.SaveImageAsync(file, true);
-                _userRepository.AddProfilePhoto(user, image, thumb);
-                
+                await using (var stream = file.OpenReadStream())
+                {
+                    (string image, string thumb) = await _imageService.SaveImageAsync(stream, file.FileName, true);
+                    _userRepository.AddProfilePhoto(user, image, thumb);
+                }
+
                 return Ok(_mapper.Map<ImageDto>(user.MainPhoto));
             }
             catch (ExtensionNotAllowedException e)
