@@ -7,10 +7,12 @@ WORKDIR /src/Server
 
 COPY ./Shared/LabApp.Shared.csproj  ../Shared/LabApp.Shared.csproj
 COPY ./Server/LabApp.Server.csproj ./LabApp.Server.csproj
+COPY ./LabApp.DbContext/LabApp.DbContext.csproj ../LabApp.DbContext/LabApp.DbContext.csproj
 RUN dotnet restore LabApp.Server.csproj
 
 COPY ./Server .
 COPY ./Shared ../Shared
+COPY ./LabApp.DbContext ../LabApp.DbContext
 RUN dotnet publish LabApp.Server.csproj --no-restore -c Release -o /app
 
 FROM build AS publish

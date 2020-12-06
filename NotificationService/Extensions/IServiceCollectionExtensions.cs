@@ -9,26 +9,33 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
+using NotificationService.Abstractions;
+using NotificationService.Services;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        private static TokenValidationParameters ValidationParameters(IConfiguration conf) => new
-            TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(conf["AppSecret"])),
-                ValidateIssuer = true,
-                ValidIssuer = conf["JwtIssuer"],
-                ValidateAudience = true,
-                ValidAudience = conf["JwtIssuer"],
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-        
-        public static void AddJwtAuthentication(this IServiceCollection services, IHostEnvironment env, IConfiguration conf,
+        private static TokenValidationParameters ValidationParameters(IConfiguration conf)
+        {
+            var parameters = new
+                TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(conf["AppSecret"])),
+                    ValidIssuer = conf["JwtIssuer"],
+                    ValidateAudience = true,
+                    ValidAudience = conf["JwtIssuer"],
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                };
+            parameters.ValidateIssuer = true;
+            return parameters;
+        }
+
+        public static void AddJwtAuthentication(this IServiceCollection services, IHostEnvironment env,
+            IConfiguration conf,
             string[] hubPaths = null)
         {
             services.AddAuthentication(options =>
@@ -60,6 +67,14 @@ namespace Microsoft.Extensions.DependencyInjection
                     }
                 );
             services.AddSingleton<JwtSecurityTokenHandler>();
+        }
+
+        public static IServiceCollection AddNotifiers(this IServiceCollection services)
+        {
+            services.AddScoped<NotifierProxy>();
+            services.AddScoped<INotifier, RealTimeNotifier>();
+
+            return services;
         }
     }
 }

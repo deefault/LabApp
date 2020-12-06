@@ -4,16 +4,17 @@ volumes:
   pg_data:
   mq_data:
   resources:
+  pg_data_notification:
 
 services:
   postgres:
     image: postgres:12
     ports:
-    - 5435:5432
+      - 5435:5432
     volumes:
-    - pg_data:/var/lib/postgresql/data
-    - ./init-dev-db.sh:/docker-entrypoint-initdb.d/init-dev-db.sh
-    - ./init.bac:/init.bac
+      - pg_data:/var/lib/postgresql/data
+      - ./init-dev-db.sh:/docker-entrypoint-initdb.d/init-dev-db.sh
+      - ./init.bac:/init.bac
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Qwerty123321
@@ -21,11 +22,11 @@ services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
     ports:
-    - 8080:15672
-    - 5672:5672
+      - 8080:15672
+      - 5672:5672
     volumes:
-    - mq_data:/var/lib/rabbitmq
-    - $PWD/init-rabbitmq.sh:/init-rabbitmq.sh
+      - mq_data:/var/lib/rabbitmq
+      - $PWD/init-rabbitmq.sh:/init-rabbitmq.sh
     environment:
       - RABBITMQ_DEFAULT_USER=event-bus
       - RABBITMQ_DEFAULT_PASS=7YhHMxNtTpnD
@@ -46,35 +47,43 @@ services:
       - Rabbit:HostName=rabbitmq
       - SeqUrl=http://seq:5341
     ports:
-    - 5000:80
+      - 5000:80
   notification_service:
     depends_on:
-      - postgres
+      - notification_service_db
       - rabbitmq
     build:
       context: .
       dockerfile: NotificationService/notification.Dockerfile
     environment:
-      - ConnectionString=Server=postgres;Port=5432;Database=LabApp;User Id=postgres;Password=Qwerty123321;
+      - ConnectionString=Server=notification_service_db;Port=5432;Database=LabApp;User Id=postgres;Password=Qwerty123321;
       - ASPNETCORE_ENVIRONMENT=Development
       - Rabbit:HostName=rabbitmq
       - SeqUrl=http://seq:5341
     ports:
       - 5004:80
+  notification_service_db:
+    image: postgres:12
+    ports:
+      - 5499:5432 
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Qwerty123321
+      - DB_NAME=LabApp
   web:
-    depends_on:
-      - server
     build:
       context: .
       dockerfile: Frontend/AngularProject/Dockerfile
       args:
         - configuration=production
     ports:
-    - 4200:80
-  
+      - 4200:80
+
   seq:
     image: datalust/seq:latest
     ports:
-    - 5341:80
+      - 5341:80
     environment:
-    - ACCEPT_EULA=Y
+      - ACCEPT_EULA=Y

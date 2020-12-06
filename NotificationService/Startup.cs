@@ -1,14 +1,16 @@
-using System.Threading;
+using System.Reflection;
 using AutoMapper;
 using LabApp.Shared.EventBus.Extensions;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NotificationService.DAL;
 using NotificationService.Hubs;
-using NotificationService.Services;
 
 namespace NotificationService
 {
@@ -31,9 +33,13 @@ namespace NotificationService
             
             services.AddSignalR(x => x.EnableDetailedErrors = _env.IsDevelopment());
             services.AddSingleton<IUserIdProvider, HubUserProvider>();
-            services.AddScoped<IRealtimeNotificationService, SignalRService>();
+            services.AddNotifiers();
+            services.AddDbContext<NotificationDbContext>(
+                builder => builder.UseNpgsql(Configuration["ConnectionString"]));
 
             services.AddAutoMapper(typeof(Program));
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+            
             
             services.AddOptions();
             services.AddControllers().AddNewtonsoftJson();
