@@ -10,7 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NotificationService.DAL;
+using NotificationService.DAL.Repositories;
 using NotificationService.Hubs;
+using NotificationService.Repositories;
 
 namespace NotificationService
 {
@@ -33,13 +35,15 @@ namespace NotificationService
             
             services.AddSignalR(x => x.EnableDetailedErrors = _env.IsDevelopment());
             services.AddSingleton<IUserIdProvider, HubUserProvider>();
-            services.AddNotifiers();
             services.AddDbContext<NotificationDbContext>(
                 builder => builder.UseNpgsql(Configuration["ConnectionString"]));
 
             services.AddAutoMapper(typeof(Program));
             services.AddMediatR(Assembly.GetExecutingAssembly());
             
+            // Services
+            services.AddNotifiers();
+            services.AddScoped<IUserOptionsRepository, UserOptionsRepository>();
             
             services.AddOptions();
             services.AddControllers().AddNewtonsoftJson();

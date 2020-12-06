@@ -73,6 +73,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.AddScoped<NotifierProxy>();
             services.AddScoped<INotifier, RealTimeNotifier>();
+            services.AddScoped<INotifier, PushNotifier>();
 
             return services;
         }

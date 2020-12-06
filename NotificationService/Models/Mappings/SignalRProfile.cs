@@ -1,5 +1,6 @@
 using AutoMapper;
 using LabApp.Shared.EventBus.Events;
+using NotificationService.DomainEvents;
 using NotificationService.Models.Dto;
 
 namespace NotificationService.Models.Mappings
@@ -8,7 +9,7 @@ namespace NotificationService.Models.Mappings
     {
         public SignalRProfile()
         {
-            CreateMap<NewMessageEvent, NewMessageDto>();
+            CreateMap<NewMessage, NewMessageDto>();
         }
     }
 }

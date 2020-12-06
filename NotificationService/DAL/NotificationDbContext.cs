@@ -11,7 +11,7 @@ namespace NotificationService.DAL
             TypeNameHandling = TypeNameHandling.Objects
         };
 
-        public virtual DbSet<UserNotificationOptions> UserOptions { get; }
+        public virtual DbSet<UserNotificationOptions> UserOptions { get; set; }
 
         public NotificationDbContext(DbContextOptions options) : base(options)
         {
