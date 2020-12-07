@@ -13,6 +13,7 @@ using LabApp.Server.Services.ImageService;
 using LabApp.Server.Services.Interfaces;
 using LabApp.Server.Services.TeacherServices;
 using LabApp.Shared.EventBus.Extensions;
+using LabApp.Shared.RpcClient.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -103,6 +104,7 @@ namespace LabApp.Server
             services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddCommon(Configuration);
+            services.AddRabbitMQRpcClient();
 
             services.AddCors(builder => builder
                 .AddPolicy("Policy", x => x

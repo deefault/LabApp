@@ -15,7 +15,7 @@ namespace LabApp.Shared.EventBus.RabbitMQ
 {
 	public class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
 	{
-		private readonly ConnectionFactory _connectionFactory;
+		private readonly IConnectionFactory _connectionFactory;
 		private readonly ILogger<DefaultRabbitMQPersistentConnection> _logger;
 		private readonly RabbitMqConnectionOptionsContainer _optionsContainer;
 		private readonly IHostApplicationLifetime _lifetime;
@@ -28,7 +28,7 @@ namespace LabApp.Shared.EventBus.RabbitMQ
 
 		private RabbitMqClientOptions Options => _optionsContainer.Options.ConsumerOptions;
 
-		public DefaultRabbitMQPersistentConnection(ConnectionFactory connectionFactory, IConfiguration configuration,
+		public DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory, IConfiguration configuration,
 			ILogger<DefaultRabbitMQPersistentConnection> logger, RabbitMqConnectionOptionsContainer optionsContainer,
 			IHostApplicationLifetime hostApplicationLifetime)
 		{

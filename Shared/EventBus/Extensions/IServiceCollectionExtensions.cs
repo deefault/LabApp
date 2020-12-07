@@ -5,11 +5,8 @@ using LabApp.Shared.EventBus.RabbitMQ;
 using LabApp.Shared.Infrastructure.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Core.DependencyInjection;
-using RabbitMQ.Client.Core.DependencyInjection.Models;
 
 namespace LabApp.Shared.EventBus.Extensions
 {
@@ -21,19 +18,13 @@ namespace LabApp.Shared.EventBus.Extensions
             services.AddConfigurations(configuration);
             
             services.AddRabbitMqClient(configuration.GetSection(RabbitMqOptions.Key));
-            services.AddSingleton<ConnectionFactory>(x =>
+            services.AddSingleton<IConnectionFactory>(x =>
             {
                 var factory = new ConnectionFactory();
 
                 return factory.ConfigureFromSection(configuration.GetSection(RabbitMqOptions.Key));
             });
-            services.AddSingleton<IRabbitMQPersistentConnection, DefaultRabbitMQPersistentConnection>(sp =>
-                new DefaultRabbitMQPersistentConnection(sp.GetRequiredService<ConnectionFactory>(),
-                    sp.GetRequiredService<IConfiguration>(),
-                    sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>(),
-                    sp.GetRequiredService<RabbitMqConnectionOptionsContainer>(),
-                    sp.GetRequiredService<IHostApplicationLifetime>()
-                ));
+            services.AddSingleton<IRabbitMQPersistentConnection, DefaultRabbitMQPersistentConnection>();
             services.AddSingleton<ISubscriptionsManager, SubscriptionsManager>();
             services.AddSingleton<IEventBus, RabbitMQEventBus>();
             services.AddEventHandlers();

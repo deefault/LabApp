@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using LabApp.Shared.EventBus.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -13,16 +12,16 @@ namespace LabApp.Shared.EventBus
     public class EventBusSubscriptionService : IHostedService
     {
         private readonly IHostApplicationLifetime _lifetime;
-        private readonly IServiceProvider _sp;
+        private readonly IEventBus _eventBus;
         private readonly ILogger<EventBusSubscriptionService> _logger;
         
         private static readonly MethodInfo SubscribeMethod = typeof(IEventBus).GetMethod(nameof(IEventBus.Subscribe));
 
-        public EventBusSubscriptionService(IHostApplicationLifetime lifetime, IServiceProvider sp,
+        public EventBusSubscriptionService(IHostApplicationLifetime lifetime, IEventBus eventBus,
             ILogger<EventBusSubscriptionService> logger)
         {
             _lifetime = lifetime;
-            _sp = sp;
+            _eventBus = eventBus;
             _logger = logger;
         }
 
@@ -32,11 +31,10 @@ namespace LabApp.Shared.EventBus
             _lifetime.ApplicationStarted.Register(() =>
             {
                 _logger.LogInformation("ApplicationStarted callback called");
-                var eventBusService = _sp.GetService<IEventBus>();
                 foreach ((Type handlerType, Type interfaceType) in SubscriptionsManager.HandlersInAssembly)
                 {
                     Type eventType = interfaceType.GenericTypeArguments.First();
-                    SubscribeMethod.MakeGenericMethod(eventType, handlerType).Invoke(eventBusService, null);   
+                    SubscribeMethod.MakeGenericMethod(eventType, handlerType).Invoke(_eventBus, null);   
                 }
             });
             
@@ -46,7 +44,7 @@ namespace LabApp.Shared.EventBus
         public Task StopAsync(CancellationToken cancellationToken)
         {
             _logger.LogTrace("StopAsync called in EventBusSubscriptionService");
-            _sp.GetRequiredService<IEventBus>().Dispose();
+            _eventBus.Dispose();
             
             return Task.CompletedTask;
         }
