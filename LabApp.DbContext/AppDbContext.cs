@@ -1,21 +1,19 @@
-﻿using System;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+﻿using EntityFrameworkCore.Triggers;
+using LabApp.Server.Data.EventOutbox;
+using LabApp.Server.Data.Extensions;
 using LabApp.Server.Data.Models;
-using LabApp.Server.Data.Models.Abstractions;
 using LabApp.Server.Data.Models.Attachments;
 using LabApp.Server.Data.Models.Dictionaries;
-using LabApp.Shared.Enums;
-using LabApp.Server.Data.Models.ManyToMany;
-using EntityFrameworkCore.Triggers;
-using LabApp.Server.Data.Extensions;
 using LabApp.Server.Data.Models.Interfaces;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using static LabApp.Server.Data.Extensions.DbContextExtensions;
+using LabApp.Server.Data.Models.ManyToMany;
+using LabApp.Shared.Data.EF.EventOutbox;
+using LabApp.Shared.Enums;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace LabApp.Server.Data
 {
-    public class AppDbContext : DbContextWithTriggers
+    public class AppDbContext : DbContextWithTriggers, IContextWithEventOutbox
     {
         private readonly IHostingEnvironment _environment;
 
@@ -96,11 +94,11 @@ namespace LabApp.Server.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.SetQueryFilterOnAllEntities<IJobDeleted>(x => !x.IsDeleted && !x.ToDelete);
-
             modelBuilder.SetQueryFilterOnAllEntities<ISoftDeletable>(x => !x.IsDeleted);
-
             modelBuilder.SetInsertedTrackableDefaults(Database);
 
+            modelBuilder.ApplyConfiguration(new EventOutboxConfiguration());
+            
             modelBuilder.Entity<AssignmentAttachment>(e =>
             {
                 e.HasOne(x => x.Assignment).WithMany(x => x.Attachments);
@@ -241,5 +239,7 @@ namespace LabApp.Server.Data
 
             #endregion
         }
+
+        public DbSet<EventMessage> EventOutbox { get; set; }
     }
 }

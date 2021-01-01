@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace LabApp.Shared.EventBus.Events.Abstractions
 {
-	public abstract class IntegrationEvent : IIntegrationEvent
+	public class IntegrationEvent : IIntegrationEvent
 	{
 		public IntegrationEvent()
 		{
