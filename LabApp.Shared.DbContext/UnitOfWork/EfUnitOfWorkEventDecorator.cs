@@ -3,14 +3,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
-using LabApp.Server.Data.EventOutbox;
 using LabApp.Shared.Data;
-using LabApp.Shared.Data.EF.EventOutbox;
-using Microsoft.EntityFrameworkCore;
+using LabApp.Shared.DbContext.EventOutbox;
+using LabApp.Shared.DbContext.Models;
 
-namespace LabApp.Server.Data
+namespace LabApp.Shared.DbContext.UnitOfWork
 {
-    public class EfUnitOfWorkEventDecorator<TContext> : IUnitOfWork where TContext : DbContext, IContextWithEventOutbox
+    public class EfUnitOfWorkEventDecorator<TContext> : IUnitOfWork where TContext : Microsoft.EntityFrameworkCore.DbContext, IContextWithEventOutbox
     {
         private readonly EfUnitOfWork<TContext> _uw;
 

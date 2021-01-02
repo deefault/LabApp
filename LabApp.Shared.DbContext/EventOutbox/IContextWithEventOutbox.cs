@@ -1,7 +1,7 @@
-using LabApp.Shared.Data.EF.EventOutbox;
+using LabApp.Shared.DbContext.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LabApp.Server.Data.EventOutbox
+namespace LabApp.Shared.DbContext.EventOutbox
 {
     public interface IContextWithEventOutbox
     {

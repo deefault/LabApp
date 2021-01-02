@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Data\EF\EventOutbox" />
     <Folder Include="EventBus\DependencyInjection" />
   </ItemGroup>
   <ItemGroup>

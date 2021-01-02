@@ -1,28 +1,24 @@
 ﻿using EntityFrameworkCore.Triggers;
-using LabApp.Server.Data.EventOutbox;
 using LabApp.Server.Data.Extensions;
 using LabApp.Server.Data.Models;
 using LabApp.Server.Data.Models.Attachments;
 using LabApp.Server.Data.Models.Dictionaries;
 using LabApp.Server.Data.Models.Interfaces;
 using LabApp.Server.Data.Models.ManyToMany;
-using LabApp.Shared.Data.EF.EventOutbox;
+using LabApp.Shared.DbContext.EventOutbox;
+using LabApp.Shared.DbContext.Models;
 using LabApp.Shared.Enums;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace LabApp.Server.Data
 {
     public class AppDbContext : DbContextWithTriggers, IContextWithEventOutbox
     {
-        private readonly IHostingEnvironment _environment;
-
         private static readonly DeleteBehavior DefaultDeleteBehavior = DeleteBehavior.SetNull;
 
-        public AppDbContext(DbContextOptions<AppDbContext> options, IHostingEnvironment environment)
+        public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-            _environment = environment;
         }
 
         #region User

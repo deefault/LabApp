@@ -1,11 +1,11 @@
-using LabApp.Shared.Data.EF.EventOutbox;
+using LabApp.Shared.DbContext.Models;
 using LabApp.Shared.EventBus.Events.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace LabApp.Server.Data.EventOutbox
+namespace LabApp.Shared.DbContext.EventOutbox
 {
     public class EventOutboxConfiguration : IEntityTypeConfiguration<EventMessage>
     {

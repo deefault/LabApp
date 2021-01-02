@@ -1,5 +1,5 @@
-using LabApp.Server.Data.EventOutbox;
-using LabApp.Shared.Data.EF.EventOutbox;
+using LabApp.Shared.DbContext.EventOutbox;
+using LabApp.Shared.DbContext.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LabApp.DbContext.Tests.EventOutboxDbContextTests
@@ -16,6 +16,8 @@ namespace LabApp.DbContext.Tests.EventOutboxDbContextTests
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<EventMessage>().Property(x => x.Id).ValueGeneratedNever();
+            modelBuilder.Entity<FakeEntity>().Property(x => x.Id).ValueGeneratedNever();
             modelBuilder.Entity<FakeEvent>().Property(x => x.Id).ValueGeneratedNever();
             modelBuilder.ApplyConfiguration(new EventOutboxConfiguration());
         }

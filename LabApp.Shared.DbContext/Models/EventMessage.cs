@@ -1,7 +1,7 @@
 using System;
 using LabApp.Shared.EventBus.Events.Abstractions;
 
-namespace LabApp.Shared.Data.EF.EventOutbox
+namespace LabApp.Shared.DbContext.Models
 {
     public class EventMessage
     {

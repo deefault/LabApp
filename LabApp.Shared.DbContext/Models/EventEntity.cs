@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using LabApp.Shared.EventBus.Events.Abstractions;
 
-namespace LabApp.Shared.Data
+namespace LabApp.Shared.DbContext.Models
 {
     public abstract class EventEntity
     {

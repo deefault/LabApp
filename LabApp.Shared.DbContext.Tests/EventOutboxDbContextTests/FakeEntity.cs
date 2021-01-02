@@ -1,4 +1,4 @@
-using LabApp.Shared.Data;
+using LabApp.Shared.DbContext.Models;
 
 namespace LabApp.DbContext.Tests.EventOutboxDbContextTests
 {

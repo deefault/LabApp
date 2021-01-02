@@ -2,11 +2,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using LabApp.Shared.Data;
-using Microsoft.EntityFrameworkCore;
 
-namespace LabApp.Server.Data
+namespace LabApp.Shared.DbContext.UnitOfWork
 {
-    public class EfUnitOfWork<TContext> : IUnitOfWork where TContext: DbContext
+    public class EfUnitOfWork<TContext> : IUnitOfWork where TContext: Microsoft.EntityFrameworkCore.DbContext
     {
         public readonly TContext DbContext;
         

@@ -2,22 +2,16 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>LabApp.Server.Data</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Models\Enums" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="EntityFrameworkCore.Triggers" Version="1.2.2" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="5.0.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.1" />
-      <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LabApp.Shared.DbContext\LabApp.Shared.DbContext.csproj" />
       <ProjectReference Include="..\Shared\LabApp.Shared.csproj" />
     </ItemGroup>
 
