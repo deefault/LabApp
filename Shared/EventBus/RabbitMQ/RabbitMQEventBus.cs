@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using LabApp.Shared.EventBus.Events.Abstractions;
 using LabApp.Shared.EventBus.Interfaces;
+using LabApp.Shared.EventConsistency.Abstractions;
 using LabApp.Shared.Infrastructure.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -174,24 +174,17 @@ namespace LabApp.Shared.EventBus.RabbitMQ
             if (_subscriptionsManager.HasSubscriptionsForEvent(eventName))
             {
                 using var scope = _scopeFactory.CreateScope();
-                
-                IEnumerable<Type> eventHandlers = _subscriptionsManager.GetHandlersForEvent(eventName);
+                Type eventType = _subscriptionsManager.GetEventTypeByName(eventName);
                 try
                 {
-                    Type eventType = _subscriptionsManager.GetEventTypeByName(eventName);
                     var integrationEvent = (IntegrationEvent) JsonSerializer.NonGeneric.Deserialize(eventType, message);
-                        
-                    foreach (Type handlerType in eventHandlers)
-                    {
-                        var handler = scope.ServiceProvider.GetService(handlerType);
-                        if (handler == null) continue;
-                            
-                        await ExecuteHandler(eventType, handler, integrationEvent);
-                    }
+
+                    var handler = scope.ServiceProvider.GetRequiredService<IIncomingIntegrationEventHandler>();
+                    await handler.HandleAsync(integrationEvent, eventType, eventName);
                 }
                 catch (JsonParsingException e)
                 {
-                    _logger.LogError(e, "Error while serializaing event to type");
+                    _logger.LogError(e, "Error while serializing event to type");
                 }
             }
             else
@@ -200,16 +193,6 @@ namespace LabApp.Shared.EventBus.RabbitMQ
             }
 
             _logger.LogTrace("Finished processing RabbitMQ event: {EventName}", eventName);
-        }
-
-        private static async Task ExecuteHandler(Type eventType, object handler, IntegrationEvent integrationEvent)
-        {
-            Type concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
-
-            await Task.Yield();
-            // ReSharper disable once PossibleNullReferenceException
-            await (Task) concreteType.GetMethod("Handle")
-                .Invoke(handler, new object[] {integrationEvent});
         }
 
         private IModel CreateConsumerChannel()

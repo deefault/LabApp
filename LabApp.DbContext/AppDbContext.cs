@@ -5,9 +5,9 @@ using LabApp.Server.Data.Models.Attachments;
 using LabApp.Server.Data.Models.Dictionaries;
 using LabApp.Server.Data.Models.Interfaces;
 using LabApp.Server.Data.Models.ManyToMany;
-using LabApp.Shared.DbContext.EventOutbox;
-using LabApp.Shared.DbContext.Models;
+using LabApp.Shared.DbContext.EventConsistency.EventOutbox;
 using LabApp.Shared.Enums;
+using LabApp.Shared.EventConsistency;
 using Microsoft.EntityFrameworkCore;
 
 namespace LabApp.Server.Data
@@ -236,6 +236,6 @@ namespace LabApp.Server.Data
             #endregion
         }
 
-        public DbSet<EventMessage> EventOutbox { get; set; }
+        public DbSet<OutboxEventMessage> EventOutbox { get; set; }
     }
 }

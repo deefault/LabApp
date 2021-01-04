@@ -1,9 +1,12 @@
 using System;
 using System.Linq;
 using LabApp.Shared.Data;
+using LabApp.Shared.DbContext.EventConsistency.EventOutbox;
 using LabApp.Shared.DbContext.UnitOfWork;
+using LabApp.Shared.EventConsistency.EventOutbox;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Xunit;
 
 namespace LabApp.DbContext.Tests.EventOutboxDbContextTests.Tests
@@ -70,9 +73,11 @@ namespace LabApp.DbContext.Tests.EventOutboxDbContextTests.Tests
         {
             var sc = new ServiceCollection();
             sc.AddDbContext<FakeDbContext>(x => x.UseInMemoryDatabase("tests_database"));
-            sc.AddScoped<IUnitOfWork, EfUnitOfWorkEventDecorator<FakeDbContext>>((IServiceProvider sp) =>
-                new EfUnitOfWorkEventDecorator<FakeDbContext>(
-                    new EfUnitOfWork<FakeDbContext>(_serviceProvider.GetRequiredService<FakeDbContext>())));
+            sc.AddSingleton<IOutboxListener>(new Mock<IOutboxListener>().Object);
+            sc.AddScoped<IUnitOfWork, EfUnitOfWorWithOutboxDecorator<FakeDbContext>>((IServiceProvider sp) =>
+                new EfUnitOfWorWithOutboxDecorator<FakeDbContext>(
+                    new EfUnitOfWork<FakeDbContext>(_serviceProvider.GetRequiredService<FakeDbContext>()),
+                    _serviceProvider.GetRequiredService<IOutboxListener>()));
             _serviceProvider = sc.BuildServiceProvider();
         }
     }

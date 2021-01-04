@@ -1,4 +1,5 @@
 using System;
+using LabApp.Shared.EventConsistency.Abstractions;
 using Newtonsoft.Json;
 
 namespace LabApp.Shared.EventBus.Events.Abstractions
@@ -19,9 +20,9 @@ namespace LabApp.Shared.EventBus.Events.Abstractions
 		}
 
 		[JsonProperty]
-		public Guid Id { get; private set; }
+		public Guid Id { get; set; }
 
 		[JsonProperty]
-		public DateTime CreationDate { get; private set; }
+		public DateTime CreationDate { get; set; }
 	}
 }
