@@ -5,9 +5,9 @@ using LabApp.Server.Data.Models.Attachments;
 using LabApp.Server.Data.Models.Dictionaries;
 using LabApp.Server.Data.Models.Interfaces;
 using LabApp.Server.Data.Models.ManyToMany;
-using LabApp.Shared.DbContext.EventConsistency.EventOutbox;
 using LabApp.Shared.Enums;
-using LabApp.Shared.EventConsistency;
+using LabApp.Shared.EventConsistency.Abstractions;
+using LabApp.Shared.EventConsistency.Stores.EF.EventOutbox;
 using Microsoft.EntityFrameworkCore;
 
 namespace LabApp.Server.Data
@@ -15,6 +15,9 @@ namespace LabApp.Server.Data
     public class AppDbContext : DbContextWithTriggers, IContextWithEventOutbox
     {
         private static readonly DeleteBehavior DefaultDeleteBehavior = DeleteBehavior.SetNull;
+
+        public bool SaveEventsOnSaveChanges { get; set; } = true;
+        public DbSet<OutboxEventMessage> EventOutbox { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
@@ -93,8 +96,6 @@ namespace LabApp.Server.Data
             modelBuilder.SetQueryFilterOnAllEntities<ISoftDeletable>(x => !x.IsDeleted);
             modelBuilder.SetInsertedTrackableDefaults(Database);
 
-            modelBuilder.ApplyConfiguration(new EventOutboxConfiguration());
-            
             modelBuilder.Entity<AssignmentAttachment>(e =>
             {
                 e.HasOne(x => x.Assignment).WithMany(x => x.Attachments);
@@ -235,7 +236,5 @@ namespace LabApp.Server.Data
 
             #endregion
         }
-
-        public DbSet<OutboxEventMessage> EventOutbox { get; set; }
     }
 }

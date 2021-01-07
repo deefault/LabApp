@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\LabApp.Shared.DbContext\LabApp.Shared.DbContext.csproj" />
+      <ProjectReference Include="..\LabApp.Shared.EventConsistency.Stores.EF\LabApp.Shared.EventConsistency.Stores.EF.csproj" />
       <ProjectReference Include="..\Shared\LabApp.Shared.csproj" />
     </ItemGroup>
 

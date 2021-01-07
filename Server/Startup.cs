@@ -102,7 +102,7 @@ namespace LabApp.Server
             // Repositories
             services.AddScoped<IUserRepository, UserRepository>();
 
-            services.AddCommon(Configuration);
+            services.AddEventBus(Configuration);
 
             services.AddCors(builder => builder
                 .AddPolicy("Policy", x => x

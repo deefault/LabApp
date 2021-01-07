@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>8</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
+      <PackageReference Include="Nito.AsyncEx" Version="5.1.0" />
+      <PackageReference Include="System.Threading.Channels" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LabApp.Shared.EventConsistency.Abstractions\LabApp.Shared.EventConsistency.Abstractions.csproj" />
+      <ProjectReference Include="..\LabApp.Shared.EventConsistency.Stores.EF\LabApp.Shared.EventConsistency.Stores.EF.csproj" />
+    </ItemGroup>
+
+</Project>

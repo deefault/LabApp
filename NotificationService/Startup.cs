@@ -47,7 +47,7 @@ namespace NotificationService
             
             services.AddOptions();
             services.AddControllers().AddNewtonsoftJson();
-            services.AddCommon(Configuration);
+            services.AddEventBus(Configuration);
 
             //services.AddScoped<CommonHub>();
             //services.AddScoped<TeacherHub>();

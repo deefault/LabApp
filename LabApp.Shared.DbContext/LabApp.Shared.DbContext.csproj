@@ -15,4 +15,8 @@
       <ProjectReference Include="..\Shared\LabApp.Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Models" />
+    </ItemGroup>
+
 </Project>
