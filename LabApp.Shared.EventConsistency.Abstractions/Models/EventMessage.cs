@@ -24,9 +24,19 @@ namespace LabApp.Shared.EventConsistency.Abstractions
 
     public static class EventMessageExtensions
     {
-        public static OutboxEventMessage ToEventMessage(this BaseIntegrationEvent @event)
+        public static OutboxEventMessage ToOutboxEventMessage(this BaseIntegrationEvent @event)
         {
             return new OutboxEventMessage()
+            {
+                Id = @event.Id.ToString(),
+                DateTime = DateTime.UtcNow,
+                EventData = @event
+            };
+        }
+        
+        public static InboxEventMessage ToInboxEventMessage(this BaseIntegrationEvent @event)
+        {
+            return new InboxEventMessage()
             {
                 Id = @event.Id.ToString(),
                 DateTime = DateTime.UtcNow,

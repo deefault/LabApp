@@ -6,8 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace LabApp.Shared.EventConsistency.EventOutbox
 {
-    public interface IFallbackOutboxEventProcessor : IFallbackEventProcessor
+    public interface IFallbackOutboxEventProcessor
     {
+        Task ProcessAsync();
     }
 
     public class FallbackOutboxEventProcessor : IFallbackOutboxEventProcessor

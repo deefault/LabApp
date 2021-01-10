@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
+using LabApp.Shared.EventConsistency.Abstractions;
 using Microsoft.Extensions.Logging;
 
 namespace LabApp.Shared.EventConsistency
 {
-    public class ChannelListenerBase
+    public class ChannelListenerBase : IOutboxListener
     {
         private readonly Channel<string> _channel;
         private readonly ILogger<ChannelListenerBase> _logger;

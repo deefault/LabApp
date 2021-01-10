@@ -9,17 +9,17 @@ namespace LabApp.Shared.EventConsistency.Stores.EF.EventInbox
 {
     public class EfInboxEventStore : IInboxEventStore
     {
-        private readonly DbContextWithEvents _db;
-        
-        public EfInboxEventStore(DbContextWithEvents db)
+        private readonly IContextWithEventInbox _db;
+
+        public EfInboxEventStore(IContextWithEventInbox db)
         {
             _db = db;
         }
 
         public async Task AddAsync(BaseIntegrationEvent @event)
         {
-            _db.EventOutbox.Add(@event.ToEventMessage());
-            await _db.SaveChangesAsync();
+            _db.EventInbox.Add(@event.ToInboxEventMessage());
+            await _db.Context.SaveChangesAsync();
         }
 
         public async Task<EventMessage> GetEventAsync(string id)
@@ -35,8 +35,8 @@ namespace LabApp.Shared.EventConsistency.Stores.EF.EventInbox
         public async Task<bool> TryDeleteEventAsync(EventMessage message)
         {
             message.DateDelete = DateTime.UtcNow;
-            _db.Update(message);
-            return (await _db.SaveChangesAsync()) == 1;
+            _db.Context.Update(message);
+            return (await _db.Context.SaveChangesAsync()) == 1;
         }
 
         public async Task DeleteEventsAsync(IEnumerable<EventMessage> messages)
@@ -44,9 +44,9 @@ namespace LabApp.Shared.EventConsistency.Stores.EF.EventInbox
             foreach (var message in messages)
             {
                 message.DateDelete = DateTime.UtcNow;
-                _db.Update(message);
+                _db.Context.Update(message);
             }
-            await _db.SaveChangesAsync();
+            await _db.Context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<EventMessage>> GetUnpublishedAsync(TimeSpan maxTime)
@@ -59,8 +59,8 @@ namespace LabApp.Shared.EventConsistency.Stores.EF.EventInbox
         public async Task IncrementFailedAsync(InboxEventMessage eventMessage)
         {
             eventMessage.FailedProcessingCount++;
-            _db.Update(eventMessage);
-            await _db.SaveChangesAsync();
+            _db.Context.Update(eventMessage);
+            await _db.Context.SaveChangesAsync();
         }
     }
 }

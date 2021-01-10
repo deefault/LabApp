@@ -17,8 +17,10 @@ namespace LabApp.Shared.EventConsistency.Infrastructure.AspNetCore
         private static readonly AsyncLock TimerLock = new AsyncLock();
         private static bool _isRunning = false;
 
+        protected bool Enabled { get; set; }
+
         protected abstract int TimerInterval { get; }
-        
+
         protected BackgroundFallbackWorkerBase(ILogger<BackgroundFallbackWorkerBase> logger,
             IServiceScopeFactory scopeFactory)
         {
@@ -28,13 +30,16 @@ namespace LabApp.Shared.EventConsistency.Infrastructure.AspNetCore
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogInformation("BackgroundEventProcessor initializing");
-            _timer = new Timer(DoWorkAsync, null, TimeSpan.Zero, TimeSpan.FromSeconds(TimerInterval));
-            
+            if (Enabled)
+            {
+                _logger.LogInformation($"{this.GetType().Name} initializing");
+                _timer = new Timer(DoWorkAsync, null, TimeSpan.Zero, TimeSpan.FromSeconds(TimerInterval));
+            }
+
             return Task.CompletedTask;
         }
 
-        private async void DoWorkAsync(object state)
+        protected async void DoWorkAsync(object state)
         {
             if (_isRunning) return;
 
@@ -55,8 +60,8 @@ namespace LabApp.Shared.EventConsistency.Infrastructure.AspNetCore
                 }
             }
         }
-        
-        protected abstract Task DoWorkInternalAsync(); 
+
+        protected abstract Task DoWorkInternalAsync();
 
         public override void Dispose()
         {

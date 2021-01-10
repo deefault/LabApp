@@ -1,11 +1,10 @@
 using System;
 using System.Linq;
-using LabApp.Shared.EventConsistency;
 using LabApp.Shared.EventConsistency.Abstractions;
 using LabApp.Shared.EventConsistency.EventInbox;
 using LabApp.Shared.EventConsistency.EventOutbox;
 using LabApp.Shared.EventConsistency.Infrastructure.AspNetCore;
-using Microsoft.Extensions.Logging;
+using LabApp.Shared.EventConsistency.Stores.EF;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Extensions.DependencyInjection
@@ -33,32 +32,35 @@ namespace Microsoft.Extensions.DependencyInjection
             if (services.FirstOrDefault(x => x.ServiceType == typeof(IInboxEventStore)) == null ||
                 services.FirstOrDefault(x => x.ServiceType == typeof(IOutboxEventStore)) == null)
             {
-                throw new Exception("Please, register IInboxEventStore, IOutboxEventStore types");
+                services.AddDefaultEventStores();
+                //throw new Exception("Please, register IInboxEventStore, IOutboxEventStore types");
             }
 
             services.AddSingleton<IInboxListener, InboxListener>();
             services.AddSingleton<IOutboxListener, OutboxListener>();
-            services.AddScoped(typeof(IIncomingIntegrationEventHandler<TEvent>), typeof(TIncomingHandler));
-            services.AddScoped(typeof(IOutgoingIntegrationEventHandler<TEvent>), typeof(TOutgoingHandler));//TODO:!!!!
 
-            services.AddScoped<IInboxEventProcessor, InboxEventProcessor>(sp =>
-                new InboxEventProcessor(sp.GetRequiredService<IInboxEventStore>(),
-                    sp.GetRequiredService<ILogger<InboxEventProcessor>>(),
-                    (IIncomingIntegrationEventHandler) sp.GetRequiredService(typeof(TIncomingHandler))));
-            services.AddScoped<IOutboxEventProcessor, OutboxEventProcessor>(sp =>
-                new OutboxEventProcessor(sp.GetRequiredService<IOutboxEventStore>(),
-                    sp.GetRequiredService<ILogger<OutboxEventProcessor>>(),
-                    (IOutgoingIntegrationEventHandler) sp.GetRequiredService(typeof(TOutgoingHandler))));
-
+            services.AddScoped<IInboxEventProcessor, InboxEventProcessor>();
             services.AddScoped<IOutboxEventProcessor, OutboxEventProcessor>();
+
+            services.AddScoped(typeof(IIncomingIntegrationEventHandler<TEvent>), typeof(TIncomingHandler));
+            services.AddScoped(typeof(IOutgoingIntegrationEventHandler<TEvent>), typeof(TOutgoingHandler));
+            services
+                .AddScoped<IInternalIncomingIntegrationEventHandler, InternalIncomingIntegrationEventHandler<TEvent>>();
+            services.AddScoped<IInternalOutgoingIntegrationEventHandler, InternalOutgoingIntegrationEvent<TEvent>>();
+
             services.AddScoped<IFallbackInboxEventProcessor, FallbackInboxEventProcessor>();
             services.AddScoped<IFallbackOutboxEventProcessor, FallbackOutboxEventProcessor>();
             services.AddHostedService<FallbackInboxEventProcessorHostedService>();
             services.AddHostedService<FallbackOutboxEventProcessorHostedService>();
 
-            services.AddScoped<IIncomingIntegrationEventHandler, IntegrationEventInboxHandler>();
-
             return services;
+        }
+
+        public static IServiceCollection AddDefaultEventStores(this IServiceCollection services)
+        {
+            return services.Any(x => x.ServiceType == typeof(DbContextWithEvents))
+                ? services
+                : services.AddEventStore();
         }
     }
 }

@@ -12,7 +12,6 @@ using LabApp.Server.Services;
 using LabApp.Server.Services.ImageService;
 using LabApp.Server.Services.Interfaces;
 using LabApp.Server.Services.TeacherServices;
-using LabApp.Shared.EventBus.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -101,8 +100,7 @@ namespace LabApp.Server
 
             // Repositories
             services.AddScoped<IUserRepository, UserRepository>();
-
-            services.AddEventBus(Configuration);
+            services.AddEventBusWithConsistency(Configuration);
 
             services.AddCors(builder => builder
                 .AddPolicy("Policy", x => x
