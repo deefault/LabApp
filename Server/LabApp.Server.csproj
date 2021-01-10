@@ -38,6 +38,7 @@
   <ItemGroup>
     <ProjectReference Include="..\LabApp.DbContext\LabApp.DbContext.csproj" />
     <ProjectReference Include="..\LabApp.Shared.EventBus\LabApp.Shared.EventBus.csproj" />
+    <ProjectReference Include="..\LabApp.Shared.EventBus.Consistency\LabApp.Shared.EventBus.Consistency.csproj" />
     <ProjectReference Include="..\Shared\LabApp.Shared.csproj" />
   </ItemGroup>
 

@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LabApp.Shared.EventConsistency.Stores.EF.EventInbox
 {
-    public interface IContextWithEventInbox
+    public interface IContextWithEventInbox : IHasDbContext
     {
-        DbSet<InboxEventMessage> EventInbox { get; set; } 
+        DbSet<InboxEventMessage> EventInbox { get; set; }
     }
 }

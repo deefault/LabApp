@@ -9,17 +9,17 @@ namespace LabApp.Shared.EventConsistency.Stores.EF.EventOutbox
 {
     public class EfOutboxEventStore : IOutboxEventStore
     {
-        private readonly DbContextWithEvents _db;
+        private readonly IContextWithEventOutbox _db;
         
-        public EfOutboxEventStore(DbContextWithEvents db)
+        public EfOutboxEventStore(IContextWithEventOutbox db)
         {
             _db = db;
         }
 
         public async Task AddAsync(BaseIntegrationEvent @event)
         {
-            _db.EventOutbox.Add(@event.ToEventMessage());
-            await _db.SaveChangesAsync();
+            _db.EventOutbox.Add(@event.ToOutboxEventMessage());
+            await _db.Context.SaveChangesAsync();
         }
 
         public async Task<EventMessage> GetEventAsync(string id)
@@ -35,8 +35,8 @@ namespace LabApp.Shared.EventConsistency.Stores.EF.EventOutbox
         public async Task<bool> TryDeleteEventAsync(EventMessage message)
         {
             message.DateDelete = DateTime.UtcNow;
-            _db.Update(message);
-            return (await _db.SaveChangesAsync()) == 1;
+            _db.Context.Update(message);
+            return (await _db.Context.SaveChangesAsync()) == 1;
         }
 
         public async Task DeleteEventsAsync(IEnumerable<EventMessage> messages)
@@ -44,9 +44,9 @@ namespace LabApp.Shared.EventConsistency.Stores.EF.EventOutbox
             foreach (var message in messages)
             {
                 message.DateDelete = DateTime.UtcNow;
-                _db.Update(message);
+                _db.Context.Update(message);
             }
-            await _db.SaveChangesAsync();
+            await _db.Context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<EventMessage>> GetUnpublishedAsync(TimeSpan maxTime)

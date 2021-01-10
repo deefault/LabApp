@@ -6,12 +6,12 @@ using LabApp.Shared.EventConsistency.Abstractions;
 
 namespace LabApp.Shared.EventBus.Consistency
 {
-    public class IncomingIntegrationEventHandlerAdapter 
+    public class IncomingIntegrationEventHandler 
         : IIncomingIntegrationEventHandler<IntegrationEvent>
     {
         private readonly IIncomingEventHandler _handler;
 
-        public IncomingIntegrationEventHandlerAdapter(IIncomingEventHandler handler)
+        public IncomingIntegrationEventHandler(IIncomingEventHandler handler)
         {
             _handler = handler;
         }

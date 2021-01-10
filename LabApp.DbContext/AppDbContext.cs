@@ -7,6 +7,7 @@ using LabApp.Server.Data.Models.Interfaces;
 using LabApp.Server.Data.Models.ManyToMany;
 using LabApp.Shared.Enums;
 using LabApp.Shared.EventConsistency.Abstractions;
+using LabApp.Shared.EventConsistency.Stores.EF;
 using LabApp.Shared.EventConsistency.Stores.EF.EventOutbox;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace LabApp.Server.Data
     {
         private static readonly DeleteBehavior DefaultDeleteBehavior = DeleteBehavior.SetNull;
 
+        public DbContext Context => this;
         public bool SaveEventsOnSaveChanges { get; set; } = true;
         public DbSet<OutboxEventMessage> EventOutbox { get; set; }
 
@@ -92,6 +94,8 @@ namespace LabApp.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.AddEventConsistency(Database);
+            
             modelBuilder.SetQueryFilterOnAllEntities<IJobDeleted>(x => !x.IsDeleted && !x.ToDelete);
             modelBuilder.SetQueryFilterOnAllEntities<ISoftDeletable>(x => !x.IsDeleted);
             modelBuilder.SetInsertedTrackableDefaults(Database);

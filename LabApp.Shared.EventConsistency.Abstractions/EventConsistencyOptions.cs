@@ -1,6 +1,6 @@
 using System;
 
-namespace LabApp.Shared.EventConsistency
+namespace LabApp.Shared.EventConsistency.Abstractions
 {
     public enum StoreType
     {

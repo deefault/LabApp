@@ -6,18 +6,19 @@ using Microsoft.Extensions.Logging;
 
 namespace LabApp.Shared.EventConsistency.EventOutbox
 {
-    public interface IOutboxEventProcessor : IEventProcessor
+    public interface IOutboxEventProcessor
     {
+        Task ProcessAsync(string id);
     }
 
     public class OutboxEventProcessor : IOutboxEventProcessor
     {
-        private readonly IOutgoingIntegrationEventHandler _handler;
+        private readonly IInternalOutgoingIntegrationEventHandler _handler;
         private readonly IOutboxEventStore _eventStore;
         private readonly ILogger<OutboxEventProcessor> _logger;
 
         public OutboxEventProcessor(IOutboxEventStore eventStore, ILogger<OutboxEventProcessor> logger,
-            IOutgoingIntegrationEventHandler handler)
+            IInternalOutgoingIntegrationEventHandler handler)
         {
             _eventStore = eventStore;
             _logger = logger;
