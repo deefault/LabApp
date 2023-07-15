@@ -7,7 +7,7 @@ namespace LabApp.Server
 	public static class AppConfiguration
 	{
 		private const string DefaultAppSecret = "393EAC2E-1957-46B2-A9E9-91CAF0BB7DB7";
-		private const string DefaultJwtIssuer = "http://localhost:5000";
+		private const string DefaultJwtIssuer = "http://localhost:5002";
 
 		private const string PostgresConnection =
 			"Server=127.0.0.1;Port=5435;Database=LabApp;User Id=postgres;Password=Qwerty123321;";
@@ -27,5 +27,7 @@ namespace LabApp.Server
 
 
 		private static string Get(string var) => Environment.GetEnvironmentVariable("LABAPP_" + var.ToUpper());
-	}
+
+		public static string Host => "http://localhost:5002";
+    }
 }

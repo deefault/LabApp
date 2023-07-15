@@ -47,7 +47,7 @@ services:
       - Rabbit:HostName=rabbitmq
       - SeqUrl=http://seq:5341
     ports:
-      - 5000:80
+      - 5002:80
   notification_service:
     depends_on:
       - notification_service_db

@@ -1,24 +1,24 @@
 #!/usr/bin/env bash
 
 BASE_PATH='/local/src/app/clients'
-
+URL = 'http://localhost:5002'
 gen_student () {
   docker run --network=host --rm -v ${PWD}:/local swaggerapi/swagger-codegen-cli-v3 generate \
-       -i http://localhost:5000/swagger/student/swagger.json \
+       -i $URL/swagger/student/swagger.json \
         -l typescript-angular \
         -o "${BASE_PATH}/student" 
 }
 
 gen_teacher () {
   docker run --network=host --rm -v ${PWD}:/local swaggerapi/swagger-codegen-cli-v3 generate \
-          -i http://localhost:5000/swagger/teacher/swagger.json \
+          -i $URL/swagger/teacher/swagger.json \
            -l typescript-angular \
            -o "${BASE_PATH}/teacher" 
 }
 
 gen_common () {
   docker run --network=host --rm -v ${PWD}:/local swaggerapi/swagger-codegen-cli-v3 generate \
-         -i http://localhost:5000/swagger/common/swagger.json \
+         -i $URL/swagger/common/swagger.json \
           -l typescript-angular \
           -o "${BASE_PATH}/common" 
 }

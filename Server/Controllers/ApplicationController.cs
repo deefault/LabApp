@@ -20,7 +20,7 @@ namespace LabApp.Server.Controllers
         public string GetImageDownloadPath()
         {
             return _environment.IsDevelopment()
-                ? new UriBuilder("http", "localhost", 5000, "/Download/Attachment").ToString()
+                ? new UriBuilder(AppConfiguration.Host, "/Download/Attachment").ToString()
                 : AppConfiguration.StorageUrl;
         }
         
