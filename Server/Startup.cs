@@ -51,7 +51,7 @@ namespace LabApp.Server
             services.AddDbContext<AppDbContext>(x =>
             {
                 x.UseLazyLoadingProxies();
-                x.UseNpgsql(AppConfiguration.ConnectionString);
+                x.UseNpgsql(AppConfiguration.ConnectionString, o =>  o.MigrationsAssembly(Assembly.GetAssembly(typeof(AppConfiguration))?.GetName().Name));
             });
             //services.AddMvc();
             //services.(configuration => { configuration.RootPath = "LabApp.Angular/dist"; });

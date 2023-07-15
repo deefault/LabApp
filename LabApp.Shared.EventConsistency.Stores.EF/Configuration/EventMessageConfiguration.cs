@@ -49,7 +49,9 @@ namespace LabApp.Shared.EventConsistency.Stores.EF.Configuration
     {
         public void Configure(EntityTypeBuilder<OutboxEventMessage> builder)
         {
-            builder.ToTable("EventOutbox", t => t.ExcludeFromMigrations());
+            builder.ToTable("EventOutbox"
+                // TODO: runtime migration t => t.ExcludeFromMigrations()
+                );
             builder.HasKey(x => x.Id);
             var indexBuilder = builder.HasIndex(x => x.DateTime);
             if (Database.IsNpgsql())
@@ -82,7 +84,9 @@ namespace LabApp.Shared.EventConsistency.Stores.EF.Configuration
         
         public void Configure(EntityTypeBuilder<InboxEventMessage> builder)
         {
-            builder.ToTable("EventInbox", t => t.ExcludeFromMigrations());
+            builder.ToTable("EventInbox"
+            // TODO t => t.ExcludeFromMigrations()
+            );
             builder.HasKey(x => x.Id);
             var indexBuilder = builder.HasIndex(x => x.DateTime);
             if (Database.IsNpgsql())

@@ -4,6 +4,7 @@ using System.Net;
 using LabApp.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LabApp.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230715174830_EventTables")]
+    partial class EventTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -895,7 +898,10 @@ namespace LabApp.Server.Migrations
                         .IsDescending()
                         .HasFilter("DateDelete IS NOT NULL");
 
-                    b.ToTable("EventInbox", (string)null);
+                    b.ToTable("EventInbox", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("LabApp.Shared.EventConsistency.Abstractions.OutboxEventMessage", b =>
@@ -921,7 +927,10 @@ namespace LabApp.Server.Migrations
                         .IsDescending()
                         .HasFilter("DateDelete IS NOT NULL");
 
-                    b.ToTable("EventOutbox", (string)null);
+                    b.ToTable("EventOutbox", null, t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Student", b =>
