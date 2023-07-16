@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
 
@@ -11,7 +11,7 @@ RUN export NODE_OPTIONS="--max-old-space-size=2048" && npx npm-force-resolutions
 COPY ./Frontend/AngularProject/ /web
 RUN export NODE_OPTIONS="--max-old-space-size=2048" && npm run build-prod
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src/Server
 
 COPY ./Shared/LabApp.Shared.csproj  ../Shared/LabApp.Shared.csproj

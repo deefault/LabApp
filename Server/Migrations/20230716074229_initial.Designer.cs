@@ -2,33 +2,47 @@
 using System;
 using System.Net;
 using LabApp.Server.Data;
-using LabApp.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
+#nullable disable
+
 namespace LabApp.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200523105034_add_IsHidden")]
-    partial class add_IsHidden
+    [Migration("20230716074229_initial")]
+    partial class initial
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "5.0.0-preview.3.20181.2")
+                .HasAnnotation("ProductVersion", "7.0.9")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
+
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("LabApp.Server.Data.Models.AdditionalScore", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("integer");
@@ -49,8 +63,9 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("AllowAfterDeadline")
                         .HasColumnType("boolean");
@@ -68,15 +83,20 @@ namespace LabApp.Server.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("SubjectId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TeacherId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SubjectId");
+
+                    b.HasIndex("TeacherId");
 
                     b.ToTable("Assignments");
                 });
@@ -85,18 +105,19 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AssignmentId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("Inserted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<bool>("IsDeleted")
@@ -133,15 +154,16 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("Inserted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<bool>("IsDeleted")
@@ -178,15 +200,16 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("Inserted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<bool>("IsDeleted")
@@ -223,18 +246,19 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AssignmentId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("Inserted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<bool>("IsDeleted")
@@ -245,10 +269,6 @@ namespace LabApp.Server.Migrations
 
                     b.Property<long>("Size")
                         .HasColumnType("bigint");
-
-                    b.Property<int?>("StudentAssignmentId")
-                        .IsRequired()
-                        .HasColumnType("integer");
 
                     b.Property<bool>("ToDelete")
                         .HasColumnType("boolean");
@@ -261,7 +281,7 @@ namespace LabApp.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentAssignmentId");
+                    b.HasIndex("AssignmentId");
 
                     b.HasIndex("UserId");
 
@@ -272,12 +292,16 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AssignmentId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("Inserted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<string>("Name")
@@ -288,6 +312,8 @@ namespace LabApp.Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AssignmentId");
+
                     b.ToTable("Conversations");
                 });
 
@@ -295,8 +321,9 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Value")
                         .IsRequired()
@@ -311,17 +338,18 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("GroupName")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("InviteCode")
-                        .HasColumnType("character varying(10)")
-                        .HasMaxLength(10);
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
 
                     b.Property<byte?>("StudyYear")
                         .HasColumnType("smallint");
@@ -345,8 +373,9 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("AssignmentId")
                         .HasColumnType("integer");
@@ -385,13 +414,13 @@ namespace LabApp.Server.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("DeadLine")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsHidden")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime?>("Start")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("GroupId", "AssignmentId");
 
@@ -409,7 +438,7 @@ namespace LabApp.Server.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("DateTime")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsHidden")
                         .HasColumnType("boolean");
@@ -445,7 +474,7 @@ namespace LabApp.Server.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("LastReadMessage")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("ConversationId", "UserId");
 
@@ -458,14 +487,15 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
 
-                    b.Property<int?>("ConversationId")
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ConversationId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("Sent")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Text")
                         .HasColumnType("text");
@@ -486,12 +516,13 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("Inserted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<string>("Text")
@@ -526,15 +557,16 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("Inserted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<bool>("IsDeleted")
@@ -569,8 +601,9 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AssignmentId")
                         .HasColumnType("integer");
@@ -578,14 +611,17 @@ namespace LabApp.Server.Migrations
                     b.Property<string>("Body")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Completed")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<DateTime?>("Completed")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal?>("FineScore")
                         .HasColumnType("numeric");
 
                     b.Property<int>("GroupId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime?>("LastStatusChange")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<decimal?>("Score")
                         .HasColumnType("numeric");
@@ -595,6 +631,9 @@ namespace LabApp.Server.Migrations
 
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime?>("Submitted")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("TeacherComment")
                         .HasColumnType("text");
@@ -610,20 +649,47 @@ namespace LabApp.Server.Migrations
                     b.ToTable("StudentAssignment");
                 });
 
+            modelBuilder.Entity("LabApp.Server.Data.Models.StudentLesson", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LessonId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Score")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LessonId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentLessons");
+                });
+
             modelBuilder.Entity("LabApp.Server.Data.Models.Subject", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("TeacherId")
                         .HasColumnType("integer");
@@ -641,31 +707,31 @@ namespace LabApp.Server.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("ContactEmail")
-                        .HasColumnType("character varying(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("DateBirth")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Middlename")
-                        .HasColumnType("character varying(50)")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int?>("PhotoId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Surname")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Thumbnail")
                         .HasColumnType("text");
@@ -681,35 +747,38 @@ namespace LabApp.Server.Migrations
                     b.ToTable("Users");
 
                     b.HasDiscriminator<byte>("UserType");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.UserIdentity", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("UserId"));
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("character varying(50)")
                         .HasMaxLength(50)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<bool>("IsVerified")
                         .HasColumnType("boolean");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("character varying(44)")
                         .HasMaxLength(44)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(44)");
 
                     b.Property<string>("PasswordSalt")
                         .IsRequired()
-                        .HasColumnType("character varying(24)")
                         .HasMaxLength(24)
-                        .IsUnicode(false);
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(24)");
 
                     b.Property<long>("Phone")
                         .HasColumnType("bigint");
@@ -733,8 +802,9 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<IPAddress>("Address")
                         .IsRequired()
@@ -742,12 +812,12 @@ namespace LabApp.Server.Migrations
 
                     b.Property<DateTime>("Inserted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<string>("UserAgent")
-                        .HasColumnType("character varying(1000)")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -765,15 +835,16 @@ namespace LabApp.Server.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime?>("DeleteDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("Inserted")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp without time zone")
+                        .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<bool>("IsDeleted")
@@ -804,29 +875,54 @@ namespace LabApp.Server.Migrations
                     b.ToTable("UserPhotos");
                 });
 
-            modelBuilder.Entity("LabApp.Server.Data.StudentLesson", b =>
+            modelBuilder.Entity("LabApp.Shared.EventConsistency.Abstractions.InboxEventMessage", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
-                    b.Property<int>("LessonId")
-                        .HasColumnType("integer");
+                    b.Property<DateTime?>("DateDelete")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("integer");
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("StudentId")
+                    b.Property<string>("EventData")
+                        .HasColumnType("json");
+
+                    b.Property<int>("FailedProcessingCount")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LessonId");
+                    b.HasIndex("DateTime")
+                        .IsDescending();
 
-                    b.HasIndex("StudentId");
+                    b.ToTable("EventInbox", (string)null);
+                });
 
-                    b.ToTable("StudentLessons");
+            modelBuilder.Entity("LabApp.Shared.EventConsistency.Abstractions.OutboxEventMessage", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DateDelete")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("EventData")
+                        .HasColumnType("json");
+
+                    b.Property<int>("FailedProcessingCount")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DateTime")
+                        .IsDescending();
+
+                    b.ToTable("EventOutbox", (string)null);
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Student", b =>
@@ -861,6 +957,10 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Assignment", b =>
@@ -870,6 +970,16 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("LabApp.Server.Data.Models.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Attachments.AssignmentAttachment", b =>
@@ -883,6 +993,10 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Attachments.LessonAttachment", b =>
@@ -896,6 +1010,10 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Lesson");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Attachments.MessageAttachment", b =>
@@ -909,21 +1027,36 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Message");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Attachments.StudentAssignmentAttachment", b =>
                 {
                     b.HasOne("LabApp.Server.Data.Models.StudentAssignment", "Assignment")
                         .WithMany("Attachments")
-                        .HasForeignKey("StudentAssignmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AssignmentId");
 
                     b.HasOne("LabApp.Server.Data.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.Conversation", b =>
+                {
+                    b.HasOne("LabApp.Server.Data.Models.StudentAssignment", "Assignment")
+                        .WithMany()
+                        .HasForeignKey("AssignmentId");
+
+                    b.Navigation("Assignment");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Group", b =>
@@ -939,6 +1072,10 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Lesson", b =>
@@ -952,6 +1089,10 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Subject");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.ManyToMany.GroupAssignment", b =>
@@ -967,6 +1108,10 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Group");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.ManyToMany.GroupLesson", b =>
@@ -982,6 +1127,10 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("LessonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Lesson");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.ManyToMany.StudentGroup", b =>
@@ -997,6 +1146,10 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.ManyToMany.UserConversation", b =>
@@ -1012,19 +1165,29 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Message", b =>
                 {
-                    b.HasOne("LabApp.Server.Data.Models.Conversation", null)
+                    b.HasOne("LabApp.Server.Data.Models.Conversation", "Conversation")
                         .WithMany("Messages")
-                        .HasForeignKey("ConversationId");
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("LabApp.Server.Data.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Conversation");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Post", b =>
@@ -1034,6 +1197,8 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.SetNull)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.PostLike", b =>
@@ -1049,6 +1214,10 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.PostPhoto", b =>
@@ -1058,6 +1227,8 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.StudentAssignment", b =>
@@ -1079,6 +1250,31 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Assignment");
+
+                    b.Navigation("Group");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.StudentLesson", b =>
+                {
+                    b.HasOne("LabApp.Server.Data.Models.Lesson", "Lesson")
+                        .WithMany()
+                        .HasForeignKey("LessonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("LabApp.Server.Data.Models.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Lesson");
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Subject", b =>
@@ -1088,6 +1284,8 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Teacher");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.User", b =>
@@ -1102,6 +1300,10 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("LabApp.Server.Data.Models.User", "UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("MainPhoto");
+
+                    b.Navigation("UserIdentity");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.UserLoginHistory", b =>
@@ -1111,6 +1313,8 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.UserPhoto", b =>
@@ -1120,21 +1324,8 @@ namespace LabApp.Server.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("LabApp.Server.Data.StudentLesson", b =>
-                {
-                    b.HasOne("LabApp.Server.Data.Models.Lesson", "Lesson")
-                        .WithMany()
-                        .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LabApp.Server.Data.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LabApp.Server.Data.Models.Teacher", b =>
@@ -1142,6 +1333,73 @@ namespace LabApp.Server.Migrations
                     b.HasOne("LabApp.Server.Data.Models.Dictionaries.AcademicRank", "AcademicRank")
                         .WithMany()
                         .HasForeignKey("AcademicRankId");
+
+                    b.Navigation("AcademicRank");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.Assignment", b =>
+                {
+                    b.Navigation("Assignments");
+
+                    b.Navigation("Attachments");
+
+                    b.Navigation("Groups");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.Conversation", b =>
+                {
+                    b.Navigation("Messages");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.Group", b =>
+                {
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.Lesson", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.Message", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.Post", b =>
+                {
+                    b.Navigation("Likes");
+
+                    b.Navigation("PostPhotos");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.StudentAssignment", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.User", b =>
+                {
+                    b.Navigation("Photos");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.UserIdentity", b =>
+                {
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.Student", b =>
+                {
+                    b.Navigation("Groups");
+                });
+
+            modelBuilder.Entity("LabApp.Server.Data.Models.Teacher", b =>
+                {
+                    b.Navigation("Groups");
+
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

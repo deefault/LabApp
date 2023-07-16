@@ -56,7 +56,8 @@ namespace LabApp.Shared.EventConsistency.Stores.EF.Configuration
             var indexBuilder = builder.HasIndex(x => x.DateTime);
             if (Database.IsNpgsql())
             {
-                indexBuilder.HasSortOrder(SortOrder.Descending).HasFilter("DateDelete IS NOT NULL");
+                indexBuilder.IsDescending()
+                    .HasFilter($"\"{nameof(OutboxEventMessage.DateDelete)}\" IS NOT NULL");
             }
             else if (Database.IsSqlServer())
             {
@@ -91,7 +92,8 @@ namespace LabApp.Shared.EventConsistency.Stores.EF.Configuration
             var indexBuilder = builder.HasIndex(x => x.DateTime);
             if (Database.IsNpgsql())
             {
-                indexBuilder.HasSortOrder(SortOrder.Descending).HasFilter("DateDelete IS NOT NULL");
+                indexBuilder.IsDescending()
+                    .HasFilter($"\"{nameof(InboxEventMessage.DateDelete)}\" IS NOT NULL");
             }
             else if (Database.IsSqlServer())
             {

@@ -54,6 +54,15 @@ namespace LabApp.Server.Services
 
         private async Task<bool> UploadAsync(Stream stream, string path)
         {
+            if (!Path.Exists(AppConfiguration.LocalStoragePath))
+                Directory.CreateDirectory(AppConfiguration.LocalStoragePath);
+            if (!Path.Exists(GetPath(AttachmentPath)))
+                Directory.CreateDirectory(GetPath(AttachmentPath));
+            if (!Path.Exists(GetPath(ImagePath)))
+                Directory.CreateDirectory(GetPath(ImagePath));
+            if (!Path.Exists(GetPath(ImageThumbnailPath)))
+                Directory.CreateDirectory(GetPath(ImageThumbnailPath));
+            
             if (File.Exists(path)) return false;
             await using FileStream fs = new FileStream(path, FileMode.CreateNew);
             await stream.CopyToAsync(fs);

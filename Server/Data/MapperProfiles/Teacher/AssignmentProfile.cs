@@ -24,7 +24,7 @@ namespace LabApp.Server.Data.MapperProfiles.Teacher
 				.ForMember(x => x.DeadLine, opt => opt.MapFrom(src => src.DeadLine))
 				.ForMember(x => x.Start, opt => opt.MapFrom(src => src.Start))
 				.ForMember(x => x.IsHidden, opt => opt.MapFrom(src => src.IsHidden))
-				.ForAllOtherMembers(opt => opt.Ignore());
+				;
 			CreateMap<AssignmentWithGroupInfo, AssignmentDto>()
 				.IncludeMembers(x => x.Assignment, x => x.GroupAssignment);
 

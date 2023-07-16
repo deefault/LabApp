@@ -8,7 +8,9 @@ namespace LabApp.Shared.Infrastructure.Logging
     {
         public static Logger CreateNlog(IConfiguration configuration)
         {
-            //var seqServerUrl = configuration["Serilog:SeqServerUrl"];
+            
+            
+            
             var logconsole = new NLog.Targets.ColoredConsoleTarget("logconsole");
             var config = new LoggingConfiguration()
             {
@@ -17,6 +19,7 @@ namespace LabApp.Shared.Infrastructure.Logging
             config.AddRule(LogLevel.Off, loggerNamePattern:"Microsoft.AspNetCore.SignalR", final :true, target: logconsole, maxLevel: LogLevel.Debug);
             config.AddRule(LogLevel.Off, loggerNamePattern:"Microsoft.AspNetCore.Http.Connections", final :true, target: logconsole, maxLevel: LogLevel.Debug);
             config.AddRule(LogLevel.Off, loggerNamePattern:"Microsoft.*", final :true, target: logconsole, maxLevel: LogLevel.Info);
+            config.AddRule(LogLevel.Off, LogLevel.Trace, logconsole, loggerNamePattern: "*");
             config.AddRule(LogLevel.Off, LogLevel.Trace, logconsole, loggerNamePattern: "*");
             //NLog.Web.NLogBuilder.ConfigureNLog(config);
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();

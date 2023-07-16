@@ -893,7 +893,7 @@ namespace LabApp.Server.Migrations
 
                     b.HasIndex("DateTime")
                         .IsDescending()
-                        .HasFilter("DateDelete IS NOT NULL");
+                        .HasFilter("\"DateDelete\" IS NOT NULL");
 
                     b.ToTable("EventInbox", (string)null);
                 });
@@ -919,7 +919,7 @@ namespace LabApp.Server.Migrations
 
                     b.HasIndex("DateTime")
                         .IsDescending()
-                        .HasFilter("DateDelete IS NOT NULL");
+                        .HasFilter("\"DateDelete\" IS NOT NULL");
 
                     b.ToTable("EventOutbox", (string)null);
                 });
